@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Archive</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input, select, button { margin: 5px; padding: 5px; }
+        .post { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+        .images-container, .youtube-container { display: flex; gap: 10px; overflow-x: auto; padding: 5px; }
+        .image { max-width: 300px; height: auto; display: block; }
+        .video-container { margin-top: 10px; }
+        .comments { margin-top: 10px; padding-left: 15px; border-left: 2px solid #ddd; display: none; }
+        .toggle-button { background-color: #008CBA; color: white; border: none; padding: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Phetasy</h1>
+    <input type="text" id="search" placeholder="Search posts...">
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <button onclick="filterPosts()">Filter</button>
+    <select id="sortOrder" onchange="filterPosts()">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="most_liked">Most Liked</option>
+    </select>
+    <div id="posts"></div>
+
+    <script>
+        let posts = [
+    {
+        "post_id": "6727452",
+        "author": "Phetasy",
+        "post_url": "https://phetasy.locals.com/post/6727452/its-the-end-of-an-era-were-moving-to-substack",
+        "content": "\n<div class=\"title\">\n                            It's the End of An Era, We're Moving to Substack!                        </div>\n<div class=\"\">\n<p>The time has come, Pham!! It\u2019s officially the end of our Locals era. This means that starting now, all of our content will be centralized over at Substack and not Locals.</p>\n<p>As you can probably see, my life is getting increasingly more bonkers, in the best possible way--but that means dividing my time between two subscriber platforms is no longer sustainable. Consolidating all of the Pham in one place will make it possible to give you more of the focused attention you deserve.</p>\n<p>Don\u2019t panic.</p>\n<ul>\n<li>No action is needed from you right now.</li>\n<li>Anyone with a Locals subscription will be grandfathered into Substack and automatically moved</li>\n<li>You will hear from us on Substack if you have duplicate subscriptions.</li>\n<li>Substack is giving the Phetasy Pham the white glove treatment, which means if you have any problems or concerns, they will be able to help you resolve it quickly.</li>\n</ul>\n<p>Locals is where it all began so the move is bittersweet. I have made lifelong friends here. We\u2019ve done writing prompts together. Worked out together. We survived COVID and traded sourdough recipes. You overwhelmed me with gifts, blankets, and words of wisdom when I had my child. We even held a Zoom memorial for a member of the Pham we lost.</p>\n<p>It\u2019s been a wild and glorious ride--and the good news is--we will continue it all on Substack. Once you familiarize yourself with the platform, you\u2019ll notice some improvements, too:</p>\n<ul>\n<li>You will be able to DM other individuals in the community</li>\n<li>Subscribers can start their own chats and keep up with them more easily</li>\n<li>You can even start your own <a href=\"/newsfeed?search=writeclub\" style=\"float: none;\">#writeclub</a> if you want</li>\n</ul>\n<p>We will be sunsetting the Phetasy Locals completely in two months. That should give you enough time to retrieve whatever writing prompts, images, or memes you want off the platform.</p>\n<p>Join us Friday night 5pm CT where I\u2019ll be hosting a livestream on Substack for subscribers to welcome you all to the new digs.</p>\n<p>Maggie and I are honored that you have chosen to support all things Phetasy and appreciate you sticking with us as we move into the exciting next phase of our many creative endeavors. We never take your time or resources for granted. Thank you for making what we do possible. </p>\n<p>We love and appreciate you.<br>\nBridget</br></p> </div>\n",
+        "likes": 31,
+        "comments": 52,
+        "is_premium": false,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "40422",
+        "author": "bridgetphetasy",
+        "post_url": "https://phetasy.locals.com/post/40422/hello-new-followers-i-hope-i-don-t-disappoint-you-i-want-this-place-to-feel-like-home-where-we",
+        "content": "\n<div class=\"\">\n<p>Hello new followers, I hope I don\u2019t disappoint you. I want this place to feel like home, where we can escape the Thunderdome and process the world. Where we can post dog pics and recipes and book recommendations. Where we support each other as we get sober, lose weight, embark on new business opportunities, creative endeavors, relationships and travels. I want this to be your oasis of sanity and laughter in an increasingly mad world. A creative outlet where you can share your spirit with us. </p>\n<p>We might not have any control over the news cycle\u2014but we can control our habits and attitude. It all starts with us. And hopefully a little piece of that will start here. </p> </div>\n",
+        "likes": 1900,
+        "comments": 423,
+        "is_premium": false,
+        "date": "2020-01-24T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6743456",
+        "author": "URGReplyGuy",
+        "post_url": "https://phetasy.locals.com/post/6743456/ngl-i-almost-spit-out-my-edible-from-chuckling-so-much-not-gonna-spoil-it-for-ya-with-a-pic-you-g",
+        "content": "\n<div class=\"\">\n<p>NGL, I almost spit out my edible from chuckling so much</p>\n<p>Not gonna spoil it for ya with a pic, you gotta go enjoy this Reply for yourself in the moment \ud83d\ude02 </p>\n<p><a class=\"link\" href=\"https://x.com/lidolmix/status/1898731751859765665?t=J1povZjlhDGDXwkZAidyRA&amp;s=19\" rel=\"noreferrer noopener\" target=\"_blank\">https://x.com/lidolmix/status/1898731751859765665?t=J1povZjlhDGDXwkZAidyRA&amp;s=19</a></p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T22:10:38Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6743324",
+        "author": "atommiller",
+        "post_url": "https://phetasy.locals.com/post/6743324/fun-fact-my-son-who-s-been-working-to-scrape-and-save-all-my-posts-from-here-reports-that-the",
+        "content": "\n<div class=\"\">\n<p><em>Fun Fact</em></p>\n<p>My son, who\u2019s been working to scrape and save all my posts from here, reports that there are 83,250 posts here.  About 1,250 of these are mine.</p> </div>\n",
+        "likes": 1,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T21:10:38Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6743121",
+        "author": "crveni",
+        "post_url": "https://phetasy.locals.com/post/6743121/smart-phones-are-not-to-blame-for-state-of-f1",
+        "content": "\n<div class=\"haspicture\">\n<p>Smart phones are not to blame for state of F1.</p> </div>\n",
+        "likes": 0,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T20:10:38Z",
+        "images": [
+            "assets/images\\6743121_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6741975",
+        "author": "PresidentMuffley",
+        "post_url": "https://phetasy.locals.com/post/6741975/i-joined-substack-and-found-the-pham-i-just-used-steve-when-i-was-prompted-for-my-name-it-ga",
+        "content": "\n<div class=\"\">\n<p>I joined substack and found the pham. I just used \u201cSteve\u201d when I was prompted for my name. It gave me the username steve194218. I suppose I could change it but I don\u2019t mind that generic sounding handle.</p>\n<p>Still trying to learn the app. I\u2019m an IT professional, but some of these modern apps make me identify with the boomers.</p> </div>\n",
+        "likes": 3,
+        "comments": 1,
+        "is_premium": false,
+        "date": "2025-03-10T14:10:38Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6741905",
+        "author": "kmcivor10",
+        "post_url": "https://phetasy.locals.com/post/6741905/song-of-the-day-what-an-unconventional-love-song-i-missed-listening-to-a-new-lady-gaga-album",
+        "content": "\n<div class=\"\">\n<p>Song of the Day \ud83e\ude77</p>\n<p>What an unconventional love song. I missed listening to a new Lady Gaga album.</p>\n<p><a class=\"link\" href=\"https://open.spotify.com/track/7xIoinMSiwIp5BWR7toO1O?si=APHNermfTDuJqW_LOcfvxQ&amp;context=spotify%3Aalbum%3A2MHUaRi9OCyTN02SoyRRBJ\" rel=\"noreferrer noopener\" target=\"_blank\">https://open.spotify.com/track/7xIoinMSiwIp5BWR7toO1O?si=APHNermfTDuJqW_LOcfvxQ&amp;context=spotify%3Aalbum%3A2MHUaRi9OCyTN02SoyRRBJ</a></p> </div>\n",
+        "likes": 1,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-10T13:10:38Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6741435",
+        "author": "TheRisky9",
+        "post_url": "https://phetasy.locals.com/post/6741435/funny-if-a-player-in-competitive-gaming-can-gain-significant-advantage-by-merely-selecting-a-partic",
+        "content": "\n<div class=\"\">\n<p>Funny: if a player in competitive gaming can gain significant advantage by merely selecting a particular character in a fighting game over his competition, we immediately rule that character as \"broken\" and request the developers to patch (fix) for more balanced play. There's no argument made of how compeition is \"inherently unfair.\" There's no discussion of the \"mental health\" of subpar players who require this broken character to feel \"included.\" </p>\n<p>However, if a man puts on a wig and calls himself a woman, and demonstrates an unfair advantage by breaking multiple records by huge margins and winning repeatedly over female competators, it's called \"tolerance\" and lauded.</p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T07:10:38Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6741100",
+        "author": "Jimby",
+        "post_url": "https://phetasy.locals.com/post/6741100/maybe-the-gays-know-there-is-a-noah-level-flood-on-the-way-so-theyre-hedging-their-gayness",
+        "content": "\n<div class=\"haspicture\">\n<p>Maybe the gays know there is a Noah level flood on the way, so they're hedging their gayness.</p> </div>\n",
+        "likes": 1,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T03:10:38Z",
+        "images": [
+            "assets/images\\6741100_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6740808",
+        "author": "EmilyJoy",
+        "post_url": "https://phetasy.locals.com/post/6740808/title",
+        "content": "\n<div class=\"\">\n<p><a class=\"tagged\" href=\"https://phetasy.locals.com/member/JaneX\">@JaneX</a> I\u2019m back to check on you \ud83e\udd14 any luck with Substack? Or did you just enjoy your Sunday<br/>\n\ud83e\udd1e\ud83e\udd1e\ud83e\udd1e</p> </div>\n",
+        "likes": 3,
+        "comments": 1,
+        "is_premium": false,
+        "date": "2025-03-10T01:10:38Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6740793",
+        "author": "Jimby",
+        "post_url": "https://phetasy.locals.com/post/6740793/the-one-was-a-bit-late-but-its-fine-im-fine-its-not-a-big-deal-i-everything-is-fine",
+        "content": "\n<div class=\"haspicture\">\n<p>The one was a bit late, but it's fine. I'm fine. It's not a big deal. I everything is fine.</p> </div>\n",
+        "likes": 8,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T01:10:38Z",
+        "images": [
+            "assets/images\\6740793_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6740690",
+        "author": "atommiller",
+        "post_url": "https://phetasy.locals.com/post/6740690/after-a-couple-hours-of-messing-around-my-son-figured-out-how-to-save-off-all-my-posts-from-locals",
+        "content": "\n<div class=\"\">\n<p>After a couple hours of messing around, my son figured out how to save off all my posts from Locals, including photos &amp; videos.  Next he\u2019s trying to save comments and replies to each post, so I can see them basically as they appear on Locals.  (Quick video of scrolling downloaded posts.)</p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-10T00:10:38Z",
+        "images": [],
+        "youtube_links": [],
+        "video_path": "assets/videos\\6740690.mp4"
+    },
+    {
+        "post_id": "6740513",
+        "author": "URGReplyGuy",
+        "post_url": "https://phetasy.locals.com/post/6740513/get-your-jd-vance-memes-before-the-trend-officially-dies-lol-just-tell-me-whose-body-image-youd-l",
+        "content": "\n<div class=\"haspicture\">\n<p>Get your JD Vance Memes before the trend officially dies! Lol</p>\n<p>Just tell me whose body/image you'd like me to convert said persons head/face to JD, and I'll get it done for ya!</p>\n<p>While supplies last!! \ud83d\ude02\ud83d\ude05</p>\n<p>Got any favorites?<br/>\nI picture JD, who claims to have enjoyed the Memes, having an IRL expression akin to the crying Will Smith meme one lol</p> </div>\n",
+        "likes": 5,
+        "comments": 2,
+        "is_premium": false,
+        "date": "2025-03-09T00:00:00Z",
+        "images": [
+            "assets/images\\6740513_0.jpg",
+            "assets/images\\6740513_1.jpg",
+            "assets/images\\6740513_2.jpg",
+            "assets/images\\6740513_3.jpg",
+            "assets/images\\6740513_4.jpg",
+            "assets/images\\6740513_5.jpg",
+            "assets/images\\6740513_6.jpg",
+            "assets/images\\6740513_7.jpg",
+            "assets/images\\6740513_8.jpg",
+            "assets/images\\6740513_9.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6739606",
+        "author": "kmcivor10",
+        "post_url": "https://phetasy.locals.com/post/6739606/song-of-the-day-the-queen-of-pop-had-to-make-her-appearance-https-open-spotify-com-track",
+        "content": "\n<div class=\"\">\n<p>Song of the Day \ud83e\ude77</p>\n<p>The Queen of Pop had to make her appearance. </p>\n<p><a class=\"link\" href=\"https://open.spotify.com/track/7jk7gqyEonmVVYahZN5zhW?si=XHqpFMqhQ0SpDN1k0-jNQQ&amp;context=spotify%3Aalbum%3A2tve5DGwub1TtbX1khPX5j\" rel=\"noreferrer noopener\" target=\"_blank\">https://open.spotify.com/track/7jk7gqyEonmVVYahZN5zhW?si=XHqpFMqhQ0SpDN1k0-jNQQ&amp;context=spotify%3Aalbum%3A2tve5DGwub1TtbX1khPX5j</a></p> </div>\n",
+        "likes": 1,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-09T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6738984",
+        "author": "crveni",
+        "post_url": "https://phetasy.locals.com/post/6738984/modern-crime",
+        "content": "\n<div class=\"haspicture\">\n<p>Modern crime</p> </div>\n",
+        "likes": 5,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-09T00:00:00Z",
+        "images": [
+            "assets/images\\6738984_0.jpg",
+            "assets/images\\6738984_1.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6738901",
+        "author": "crveni",
+        "post_url": "https://phetasy.locals.com/post/6738901/password",
+        "content": "\n<div class=\"haspicture\">\n<p>Password.</p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-09T00:00:00Z",
+        "images": [
+            "assets/images\\6738901_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6738389",
+        "author": "URGReplyGuy",
+        "post_url": "https://phetasy.locals.com/post/6738389/sorry-not-sorry-but-anyone-in-dc-government-jobs-who-voted-for-trump-this-election-is-like-if-german",
+        "content": "\n<div class=\"\">\n<p>Sorry not sorry but anyone in DC government jobs who voted for Trump this election is like if German Jews voted for Hitler and then were like \"yeah but I didn't think he meant <strong>I</strong> was going to be sent to this death camp!!\"</p>\n<p>Their only logical defense would be they could mention how, in the past, he's rarely <em>actually</em> followed through on any of his campaign promises</p>\n<p>But y'all were literally at his rallies  effectively screaming \"take (my) job!\" unironically so I have very little sympathy left for you tbh</p>\n<p>Someone should've made a New Yorker type cartoon of an alligator yelling \"drain the swamp\" in 1 then \"hey, what are you doing?\" as they get drained in 2 lol</p>\n<p><a class=\"link\" href=\"https://x.com/CalltoActivism/status/1898476587059982559?t=k-z6Pf5TgtMXynRIxAkBkQ&amp;s=19\" rel=\"noreferrer noopener\" target=\"_blank\">https://x.com/CalltoActivism/status/1898476587059982559?t=k-z6Pf5TgtMXynRIxAkBkQ&amp;s=19</a></p> </div>\n",
+        "likes": 3,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6737755",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6737755/emilyjoy-this-is-helping-me-a-lot-right-now",
+        "content": "\n<div class=\"haspicture\">\n<p><a class=\"tagged\" href=\"https://phetasy.locals.com/member/EmilyJoy\">@EmilyJoy</a> This is helping me a lot right now.</p> </div>\n",
+        "likes": 5,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [
+            "assets/images\\6737755_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6737366",
+        "author": "Jimby",
+        "post_url": "https://phetasy.locals.com/post/6737366/we-have-only-another-12-years-again-now-that-trump-is-back-in-office",
+        "content": "\n<div class=\"haspicture\">\n<p>We have only another 12 years again now that Trump is back in office.</p> </div>\n",
+        "likes": 7,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [
+            "assets/images\\6737366_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6737360",
+        "author": "Eljo1453",
+        "post_url": "https://phetasy.locals.com/post/6737360/df-can-democrats-be-normal-so-does-bella-have-a-yt-channel-asking-for-a-friend",
+        "content": "\n<div class=\"\">\n<p>DF \u201cCan Democrats Be Normal?\u201d So does Bella have a YT Channel? Asking for a friend\u2026</p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6736676",
+        "author": "kmcivor10",
+        "post_url": "https://phetasy.locals.com/post/6736676/song-of-the-day-keep-your-head-up-pham-https-open-spotify-com-track-4tttv4p2xuaq1lpq7li95",
+        "content": "\n<div class=\"\">\n<p>Song of the Day \ud83e\ude77</p>\n<p>Keep your head up, Pham.</p>\n<p><a class=\"link\" href=\"https://open.spotify.com/track/4Tttv4p2xuAq1LpQ7LI95E?si=dC9Sdo7jTDWbnox7ztSGjw&amp;context=spotify%3Aplaylist%3A5H1QhFikQRBg5oSlzuHOB4\" rel=\"noreferrer noopener\" target=\"_blank\">https://open.spotify.com/track/4Tttv4p2xuAq1LpQ7LI95E?si=dC9Sdo7jTDWbnox7ztSGjw&amp;context=spotify%3Aplaylist%3A5H1QhFikQRBg5oSlzuHOB4</a></p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6736622",
+        "author": "crveni",
+        "post_url": "https://phetasy.locals.com/post/6736622/trump-breaks-the-news-again",
+        "content": "\n<div class=\"haspicture\">\n<p>Trump breaks the news again.</p> </div>\n",
+        "likes": 1,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [
+            "assets/images\\6736622_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6736503",
+        "author": "EmilyJoy",
+        "post_url": "https://phetasy.locals.com/post/6736503/good-morning-i-wrote-something-tldr-over-on-substack-it-s-a-little-scary-but",
+        "content": "\n<div class=\"haspicture\">\n<p>Good morning! I wrote something tldr over on Substack \ud83e\udd26\ud83c\udffb\u200d\u2640\ufe0f it\u2019s a little scary\u2026but if it\u2019s locked down for just subscribers it\u2019ll be okay, right? Someone said this feed is more public than I realized\u2026but y\u2019all have and kind, encouraging and accepting.</p>\n<p><a href=\"/newsfeed?search=MyDadsQuoteBook\" style=\"float: none;\">#MyDadsQuoteBook</a> different page than over there and an old painting from the year of my bloody Mother\u2019s Day (I think \ud83e\udd14)</p> </div>\n",
+        "likes": 6,
+        "comments": 6,
+        "is_premium": false,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [
+            "assets/images\\6736503_0.jpg",
+            "assets/images\\6736503_1.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6736058",
+        "author": "Writtenbymurphy",
+        "post_url": "https://phetasy.locals.com/post/6736058/speabody-hey-sam-did-you-make-it-over-to-substack-i-don-t-think-i-saw-you-yet-don-t-get",
+        "content": "\n<div class=\"\">\n<p><a class=\"tagged\" href=\"https://phetasy.locals.com/member/speabody\">@speabody</a> hey Sam\u2026 did you make it over to substack? I don\u2019t think I saw you yet</p>\n<p>\u2026don\u2019t get left behind\u2026we need you</p> </div>\n",
+        "likes": 4,
+        "comments": 6,
+        "is_premium": false,
+        "date": "2025-03-08T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6735930",
+        "author": "EmilyJoy",
+        "post_url": "https://phetasy.locals.com/post/6735930/smaoife-will-you-be-coming-to-substack-i-don-t-want-to-lose-touch-with-you-i-still-need-your-mu",
+        "content": "\n<div class=\"\">\n<p><a class=\"tagged\" href=\"https://phetasy.locals.com/member/smaoife\">@smaoife</a> will you be coming to Substack? I don\u2019t want to lose touch with you! I still need your music recommendations and would like to visit you in Europe someday\u2026</p> </div>\n",
+        "likes": 4,
+        "comments": 2,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6735760",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6735760/i-feel-like-i-got-lost-and-left-behind-after-the-zombie-apocalypse-and-can-t-get-into-the-survivor",
+        "content": "\n<div class=\"haspicture\">\n<p>I feel like I got lost and left behind after the zombie apocalypse and can\u2019t get into the survivor\u2019s hideout. Help! How do I find this Cora on Substack that I keep hearing about?</p> </div>\n",
+        "likes": 5,
+        "comments": 5,
+        "is_premium": true,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [
+            "assets/images\\6735760_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6735529",
+        "author": "Jimby",
+        "post_url": "https://phetasy.locals.com/post/6735529/coming-to-a-municipal-records-office-near-you",
+        "content": "\n<div class=\"haspicture\">\n<p>Coming to a municipal records office near you.</p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [
+            "assets/images\\6735529_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6735279",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6735279/trying-to-join-the-live-party-over-at-substack-but-getting-this-message",
+        "content": "\n<div class=\"haspicture\">\n<p>Trying to join the live party over at Substack but getting this message\u2026</p> </div>\n",
+        "likes": 2,
+        "comments": 2,
+        "is_premium": true,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [
+            "assets/images\\6735279_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6734841",
+        "author": "Writtenbymurphy",
+        "post_url": "https://phetasy.locals.com/post/6734841/checking-in-wonco-the-sane-are-you-going-to-head-over-to-substack-shortly-i-d-love-to-see-you",
+        "content": "\n<div class=\"\">\n<p>Checking in <a class=\"tagged\" href=\"https://phetasy.locals.com/member/Wonco-the-Sane\">@Wonco-the-Sane</a> are you going to head over to substack shortly?</p>\n<p>I\u2019d love to see you in the new spot</p> </div>\n",
+        "likes": 4,
+        "comments": 5,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6734748",
+        "author": "ADEPTUS",
+        "post_url": "https://phetasy.locals.com/post/6734748/2-hours-later-so-the-reason-i-cannot-make-a-substack-account-and-that-my-email-is-invalid",
+        "content": "\n<div class=\"\">\n<p>....2 hours later.... so the reason I cannot make a Substack account and that my email is \"invalid\"... like I'm a fking invalid,  with a parking badge, etc.. is that i already joined Substack in August 2023.</p>\n<p>I am clearly so intelligent that I am, in fact, 18 months (and 2 hours) ahead of myself... this is the only viable conclusion....\ud83d\ude02</p>\n<p>Ade x</p> </div>\n",
+        "likes": 3,
+        "comments": 4,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6734529",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6734529/pham-please-share-phunny-memes-phunny-pet-photos-whatever-having-the-most-aggravating-day-with-t",
+        "content": "\n<div class=\"\">\n<p>Pham- please share phunny memes, phunny pet photos, whatever. Having the most aggravating day with the worst store team I \u2018ve ever had to deal with. I\u2019m so tempted to start shit just to get myself banned from this store but I don\u2019t want to do that to my manager.</p> </div>\n",
+        "likes": 3,
+        "comments": 16,
+        "is_premium": true,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6733668",
+        "author": "kmcivor10",
+        "post_url": "https://phetasy.locals.com/post/6733668/song-of-the-day-happy-friday-pham-i-hope-you-get-on-the-road-sometime-soon-https-open-s",
+        "content": "\n<div class=\"\">\n<p>Song of the Day \ud83e\ude77</p>\n<p>Happy Friday, Pham! I hope you get on the road sometime soon. </p>\n<p><a class=\"link\" href=\"https://open.spotify.com/track/7aOor99o8NNLZYElOXlBG1?si=6UmKEnY6Rc-kbJ-NYBAieA&amp;context=spotify%3Aartist%3A4NpFxQe2UvRCAjto3JqlSl\" rel=\"noreferrer noopener\" target=\"_blank\">https://open.spotify.com/track/7aOor99o8NNLZYElOXlBG1?si=6UmKEnY6Rc-kbJ-NYBAieA&amp;context=spotify%3Aartist%3A4NpFxQe2UvRCAjto3JqlSl</a></p> </div>\n",
+        "likes": 1,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6733116",
+        "author": "EmilyJoy",
+        "post_url": "https://phetasy.locals.com/post/6733116/mydadsquotebook-and-text-from-my-dad-last-night-i-called-my-dad-last-night-because-i-am-in-so-muc",
+        "content": "\n<div class=\"haspicture\">\n<p><a href=\"/newsfeed?search=MyDadsQuoteBook\" style=\"float: none;\">#MyDadsQuoteBook</a> and text from my dad last night.</p>\n<p>I called my dad last night because I am in so much pain, I love him, and thought a quick call to say hello might be nice for both of us. </p>\n<p>Everyone in my family quit talking to me back in fall of 2022 because I was so miserable. Gnashing my teeth trying to get out of \u201cthe trap\u201d of this business I was fake sold. Going to counseling trying to get out of \u201cthe trap.\u201d Scrambling. Searching. Clawing for some rope to help me save myself\u2026</p>\n<p>My dad\u2019s encouragement was nice. I\u2019ll fail though \ud83d\ude1e no matter how hard I try, I still can\u2019t manage to live up to the standards I aspire to. I want to be good, kind, true, and helpful.</p>\n<p>I need grace for myself and that always seems so elusive.</p>\n<p>I want Bridget to be successful on Substack, X, comedy clubs, in her family\u2026wherever she goes and the rest of y\u2019all too. </p>\n<p>I don\u2019t know how to do better than I\u2019m doing right now but hopefully there\u2019s still time for me to learn.</p> </div>\n",
+        "likes": 9,
+        "comments": 5,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [
+            "assets/images\\6733116_0.jpg",
+            "assets/images\\6733116_1.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6732864",
+        "author": "URGReplyGuy",
+        "post_url": "https://phetasy.locals.com/post/6732864/alive-its-been-tough-for-me-to-get-in-a-proper-mindset-to-produce-for-long-enough-to-make-a-full-s",
+        "content": "\n<div class=\"\">\n<p>Alive</p>\n<p>It's been tough for me to get in a proper mindset to Produce for long enough to make a full song in months due to my less-than-ideal situation(s) in my life of late</p>\n<p>But I kinda did that today</p>\n<p>If any of you are into House or EDM, I'm still fully open to feedback as this is just the 1st day of basic sequencing for me on this one</p>\n<p>So it could really go practically anywhere from here (both in changes to the existing structure and expansions beyond it) so if you have any ideas, go ahead and shout them out! \ud83d\ude42 \ud83d\udc4d </p>\n<p>Listen to Alive by Underrated Reply Guy on <a href=\"/newsfeed?search=SoundCloud\" style=\"float: none;\">#SoundCloud</a><br>\n<a class=\"link\" href=\"https://on.soundcloud.com/TNg89H75Y9WvtMtm8\" rel=\"noreferrer noopener\" target=\"_blank\">https://on.soundcloud.com/TNg89H75Y9WvtMtm8</a></br></p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6732686",
+        "author": "URGReplyGuy",
+        "post_url": "https://phetasy.locals.com/post/6732686/as-the-2025-day-of-the-dude-is-winding-down-heres-a-dudeist-til-pov-for-ya-so-apparently-we-sa",
+        "content": "\n<div class=\"haspicture\">\n<p>As the 2025 Day of The Dude is winding down, here's a Dudeist TIL POV for ya...</p>\n<p>So apparently we say this is a tangent of or on that tangent conversationally and that makes sense to us</p>\n<p>...but that doesn't make sense mathematically, which is where the conversational term was derived from</p>\n<p>Tl;Dr Tangets in math/shapes cannot have tangents of their own<br/>\n\ud83e\udd2f \ud83e\udd2f \ud83e\udd2f</p> </div>\n",
+        "likes": 2,
+        "comments": 1,
+        "is_premium": false,
+        "date": "2025-03-07T00:00:00Z",
+        "images": [
+            "assets/images\\6732686_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6732559",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6732559/laughing-my-ass-off-watching-this-based-on-the-premise-i-had-no-intention-of-watching-but-hearing",
+        "content": "\n<div class=\"haspicture\">\n<p>Laughing my ass off watching this. Based on the premise, I had no intention of watching but hearing Bridget mention it made me check it out. </p>\n<p>Thanks for tonight\u2019s decompress comedy, Bridget!</p> </div>\n",
+        "likes": 2,
+        "comments": 3,
+        "is_premium": true,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [
+            "assets/images\\6732559_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6732094",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6732094/substack-is-a-big-learning-curve-for-me-and-even-though-i-ve-had-an-account-for-a-while-i-ve-n",
+        "content": "\n<div class=\"haspicture\">\n<p>Substack is a big learning curve for me. And even though I\u2019ve had an account for a while, I\u2019ve never had much incentive to actively use it. I often end up there, cluelessly, when I click on links from other sites but feel so lost once I\u2019m there that I quickly leave. Now I must get familiar with it. </p>\n<p>Anyway, that wasn\u2019t what I wanted to share but there it is. </p>\n<p>Listening to this week\u2019s WiW, and suddenly felt a huge relief and gratitude that the lockdowns lead to the Pham. In a weird dichotomy, the pandemic lockdowns saved my life but not because it kept me from getting COVID. It gave me the first opportunity in over five years of being an unwitting workaholic at my previous job, to stop and take a breath and be able to see how crazy my work schedule had been. It was the beginning of the end and the beginning of me finally seeing how fucked up I was and start to get help. AND it gave me time to do things like listen to podcasts where I first heard Bridget on Rogan. </p>\n<p>If none of that had happened, I likely would never have found this place, and realized that there were sane (? \ud83e\udd23)humans. </p>\n<p>Seeing an NPR post about Sheryl Crow selling her Tesla and donating the money to them, pushed me over a little edge. I remember hearing stories about Elon\u2019s bad behavior towards his babies\u2019 mamas years ago. No one seemed to mind him so much then. And I have to assume all these folks (one is an acquaintance of mine) making a big show of getting rid of their Teslas didn\u2019t have a problem during all the Twitter drama??? </p>\n<p>UGH, rant over. I feel like I\u2019m becoming as insufferable as those I\u2019m complaining about. \ud83e\udd26\ud83c\udffb\u200d\u2640\ufe0f\ud83e\udd37\ud83c\udffb\u200d\u2640\ufe0f</p>\n<p>And the IRS story on WiW made my head implode.</p> </div>\n",
+        "likes": 3,
+        "comments": 2,
+        "is_premium": true,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [
+            "assets/images\\6732094_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6731706",
+        "author": "nansoflo",
+        "post_url": "https://phetasy.locals.com/post/6731706/my-very-first-post",
+        "content": "\n<div class=\"haspicture\">\n<p>My very first post.</p> </div>\n",
+        "likes": 5,
+        "comments": 1,
+        "is_premium": false,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [
+            "assets/images\\6731706_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6731305",
+        "author": "Eljo1453",
+        "post_url": "https://phetasy.locals.com/post/6731305/another-great-dumpster-fire-that-s-it",
+        "content": "\n<div class=\"\">\n<p>Another great Dumpster Fire \ud83d\udd25 That\u2019s it\u2026</p> </div>\n",
+        "likes": 2,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6731243",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6731243/what-s-annoying-me-today-libs-selling-their-teslas-did-they-not-hear-about-what-a-dick-elon-was",
+        "content": "\n<div class=\"\">\n<p>What\u2019s annoying me today- libs selling their Teslas. Did they not hear about what a dick Elon was years ago when stories about his baby mamas drama were coming out? Or even with rhe whole Twitter deal??? \ud83d\ude44\ud83d\ude44\ud83d\ude44</p> </div>\n",
+        "likes": 0,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6730368",
+        "author": "lcd2426",
+        "post_url": "https://phetasy.locals.com/post/6730368/since-the-locals-era-of-phetasy-is-ending-i-went-back-to-the-beginning-and-read-some-old-posts-and",
+        "content": "\n<div class=\"\">\n<p>Since the Locals era of  Phetasy is ending I went back to the beginning and read some old posts and I'm not embarrassed by them. If anything I wish I had a little less clarity on things to be honest. I will say, the people who joined here between 2020-2022 are a mercurial bunch and I mean that in the best way possible because that was some wild times. We are The Pit from PCU. </p> </div>\n",
+        "likes": 7,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [],
+        "youtube_links": [
+            "https://www.youtube.com/embed/p29ItEFC2jw?rel=0&showinfo=1&color=white&iv_load_policy=3&playsinline=1&autoplay=1&enablejsapi=1"
+        ]
+    },
+    {
+        "post_id": "6730111",
+        "author": "kmcivor10",
+        "post_url": "https://phetasy.locals.com/post/6730111/song-of-the-day-you-ever-just-looked-at-someone-you-knew-and-gone-oh-fuck-you-that",
+        "content": "\n<div class=\"\">\n<p>Song of the Day \ud83e\ude77</p>\n<p>You ever just looked at someone you knew and gone, \u201cOh, fuck you.\u201d That\u2019s this song. \ud83c\udfb6 </p>\n<p><a class=\"link\" href=\"https://open.spotify.com/track/4fouWK6XVHhzl78KzQ1UjL?si=1nTcMOARRqiYdkTHmG_F8Q&amp;context=spotify%3Aplaylist%3A37i9dQZF1DWUZMtnnlvJ9p\" rel=\"noreferrer noopener\" target=\"_blank\">https://open.spotify.com/track/4fouWK6XVHhzl78KzQ1UjL?si=1nTcMOARRqiYdkTHmG_F8Q&amp;context=spotify%3Aplaylist%3A37i9dQZF1DWUZMtnnlvJ9p</a></p> </div>\n",
+        "likes": 3,
+        "comments": 6,
+        "is_premium": true,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6730081",
+        "author": "PresidentMuffley",
+        "post_url": "https://phetasy.locals.com/post/6730081/i-got-the-emails-about-switching-to-substack-they-were-in-my-spam-folder-but-i-moved-them-i-only",
+        "content": "\n<div class=\"\">\n<p>I got the emails about switching to Substack (they were in my spam folder, but I moved them). I only use Locals on my phone. Should I install substack on my phone and make the switch there? Or should I do it on my laptop, then install the app?</p> </div>\n",
+        "likes": 3,
+        "comments": 1,
+        "is_premium": false,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6729839",
+        "author": "nansoflo",
+        "post_url": "https://phetasy.locals.com/post/6729839/okay-pham-i-m-on-substack-any-suggestions-for-follows",
+        "content": "\n<div class=\"\">\n<p>Okay Pham, I\u2019m on substack.  Any suggestions for follows?</p> </div>\n",
+        "likes": 1,
+        "comments": 2,
+        "is_premium": false,
+        "date": "2025-03-06T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6729117",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6729117/munchkin-s-fave-bf-in-the-neighborhood-bruno",
+        "content": "\n<div class=\"\">\n<p>Munchkin\u2019s fave BF in the neighborhood, Bruno.</p> </div>\n",
+        "likes": 6,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [],
+        "youtube_links": [],
+        "video_path": "assets/videos\\6729117.mp4"
+    },
+    {
+        "post_id": "6728275",
+        "author": "speabody",
+        "post_url": "https://phetasy.locals.com/post/6728275/this-is-not-a-criticism-of-our-dear-op-but-the-trope-that-trump-made-people-awful-or-broke-them-hold",
+        "content": "\n<div class=\"haspicture\">\n<p>This is not a criticism of our dear OP but the trope that Trump made people awful or broke them holds no water. Frankly, I've been over it since 2017. If an opposing worldview so easily provokes this reaction then maybe your politics suck and you were always insufferable. And wrong. And a bad person.</p> </div>\n",
+        "likes": 4,
+        "comments": 0,
+        "is_premium": false,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [
+            "assets/images\\6728275_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6728216",
+        "author": "JaneX",
+        "post_url": "https://phetasy.locals.com/post/6728216/my-psa-a-munchkin-they-come-in-a-variety-of-sizes-and-colors-makes-a-great-foot-warmer-when-one-i",
+        "content": "\n<div class=\"haspicture\">\n<p>My PSA- a Munchkin (they come in a variety of sizes and colors) makes a great foot warmer when one is sick in bed.</p> </div>\n",
+        "likes": 6,
+        "comments": 0,
+        "is_premium": true,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [
+            "assets/images\\6728216_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6727541",
+        "author": "atommiller",
+        "post_url": "https://phetasy.locals.com/post/6727541/my-first-post-here-almost-5-years-ago-time-flies-when-the-world-is-burning",
+        "content": "\n<div class=\"haspicture\">\n<p>My first post here, almost 5 years ago.  Time flies when the world is burning.<br/>\n|<br/>\n|<br/>\n|</p> </div>\n",
+        "likes": 10,
+        "comments": 2,
+        "is_premium": false,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [
+            "assets/images\\6727541_0.jpg"
+        ],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6727465",
+        "author": "bridgetphetasy",
+        "post_url": "https://phetasy.locals.com/post/6727465/important-and-exciting-announcement",
+        "content": "\n<div class=\"title\">\n                            Important and Exciting Announcement!!!!                        </div>\n<div class=\"\">\n<p><a class=\"link\" href=\"https://phetasy.locals.com/post/6727452/its-the-end-of-an-era-were-moving-to-substack\" rel=\"noreferrer noopener\" target=\"_blank\">https://phetasy.locals.com/post/6727452/its-the-end-of-an-era-were-moving-to-substack</a></p> </div>\n",
+        "likes": 11,
+        "comments": 2,
+        "is_premium": false,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    },
+    {
+        "post_id": "6727024",
+        "author": "Bravodave",
+        "post_url": "https://phetasy.locals.com/post/6727024/happy-ash-wednesday-at-the-start-of-lent-i-have-deactivated-my-fb-account-and-deleted-the-app-off",
+        "content": "\n<div class=\"\">\n<p>Happy Ash Wednesday! At the start of Lent. I have deactivated my FB account and deleted the app off of my phone. I\u2019ve also deleted Twitter off of my phone. Gonna be a delightfully ignorant 40 days and nights. Also, while not technically biblical. I\u2019m gong to try and go vegan on days of fasting.</p> </div>\n",
+        "likes": 12,
+        "comments": 1,
+        "is_premium": false,
+        "date": "2025-03-05T00:00:00Z",
+        "images": [],
+        "youtube_links": []
+    }
+];
+        let comments = {
+    "6727452": [
+        {
+            "comment_id": "10257885",
+            "author": "Emily Bludworth @EmilyJoy",
+            "date": "March 07, 2025",
+            "content": "I immediately panicked.<br>I love you all so much, want you do well, be happy successful, and thank you so much for letting me part of this community.<br>People have been argumentative and rude more than once when I posted my dads quote book over there (did that consistently for quite awhile after Bridget asked us in a Sarah Connor to check it out\u2026) which makes me hesitant.<br>I haven\u2019t been able to get out from under this black cloud I\u2019m hauling around either no matter how hard I try so you all are probably better off without me even though I\u2019m not sure I\u2019m better off without you.<br>@bridgetphetasy<br>I wish you all the success you can dream of and more. I think you\u2019re wonderful and I\u2019m sorry I\u2019m so conflicted. I\u2019ll always support you and your content even if I should just remain a lurker going forward.",
+            "likes": "3",
+            "replies": []
+        },
+        {
+            "comment_id": "10251433",
+            "author": "Mark Stranczek@mstranczek",
+            "date": "March 05, 2025",
+            "content": "Glad you are doing what you feel is best!  It has been amazing watching you grow your brand these many years.<br>After figuring out what substack is, I am trying to figure out their app.  So far, I find it very confusing and cumbersome.  Not sure what the app is trying to be.<br>I will give it some time and see if it is something I want to stick with.<br>Good luck!",
+            "likes": "6",
+            "replies": []
+        },
+        {
+            "comment_id": "10250882",
+            "author": "erika@smashingart",
+            "date": "March 05, 2025",
+            "content": "I'm with<br>@atommiller<br>that I will miss this place. I'm grateful to<br>@bridgetphetasy<br>and the Pham for creating a remarkable corner of the internet that kept me sane through mass hysteria and a few personal upheavals. Maybe the consolidation will foster that again. \ud83e\udde1<br>Oh, and I'm still waiting for Sammi's apple pie recipe \ud83d\ude0b",
+            "likes": "5",
+            "replies": []
+        },
+        {
+            "comment_id": "10250541",
+            "author": "TiredModerate@TiredModerate",
+            "date": "March 05, 2025",
+            "content": "@Phetasy<br>I was hoping this was coming. You guys are the only reason I visit Locals now, and I'm on Substack all day. It's replaced Facebook and other traditional (hah) social media sites too.",
+            "likes": "4",
+            "replies": []
+        },
+        {
+            "comment_id": "10249647",
+            "author": "Jackie@jackiex004",
+            "date": "March 05, 2025",
+            "content": "just a heads up I did this with Triggernometry and my account never moved and I'm not sure the substack person ever contacted me. The trig folks had to fix it",
+            "likes": "5",
+            "replies": []
+        },
+        {
+            "comment_id": "10249415",
+            "author": "Mrdan242@MrDan242",
+            "date": "March 05, 2025",
+            "content": "@Phetasy<br>Hey Pham,<br>I briefly looked but didn't see anything.  Is the substack app available on the FireTV app?  If you saw the recent youtube discussion in Alphabet results, they are getting more traffic from TVs than mobile and my wife and I are part of that.  The Locals app is in the Amazon app store and it easy to watch the unedited DFs together on the TV.  Hopefully it's not too difficult to still do that with Substack.<br>Thanks Everyone!",
+            "likes": "3",
+            "replies": []
+        },
+        {
+            "comment_id": "10249139",
+            "author": "PresidentMuffley@PresidentMuffley",
+            "date": "March 05, 2025",
+            "content": "What if we don\u2019t have a substack subscription? I\u2019ve never even looked at substack.",
+            "likes": "3",
+            "replies": []
+        },
+        {
+            "comment_id": "10249119",
+            "author": "J.P.@Eljo1453",
+            "date": "March 05, 2025",
+            "content": "So that includes Rumble as well?",
+            "likes": "0",
+            "replies": []
+        },
+        {
+            "comment_id": "10249105",
+            "author": "Atom@atommiller",
+            "date": "March 05, 2025",
+            "content": "I will miss this place.  I joined here in March 2020.   As most of the world was going into isolation, I found a great new group of people sharing their life stories, music, recipes, pet photos and everything else.<br>The \u201cpandemic\u201d was fucked on many levels, but I had a great time here.  In the immortal words of RHCP \u201cWay back when will never be again, it was a time\u201d.<br>It really was a time.<br>I\u2019ve been a paid on Substack for a while but haven\u2019t totally figured out the app.  I like the chat experience her better, but the Locals developers seem intent on making the platform worse with each new update.<br>Gotta go with the flow.",
+            "likes": "8",
+            "replies": []
+        },
+        {
+            "comment_id": "10249026",
+            "author": "murphy daley@Writtenbymurphy",
+            "date": "March 05, 2025",
+            "content": "@bridgetphetasy<br>congratulations on this move. I know the spirit of community you foster will follow into<br>the new platform and I\u2019m looking forward to it<br>yes, this platform is full of memories. And I trust you, the phetasy team and the Pham to do new fantastic things in the new digs<br>we are a growing g community of supporter and fans and you needed to upgrade",
+            "likes": "4",
+            "replies": []
+        }
+    ],
+    "40422": [
+        {
+            "comment_id": "8762375",
+            "author": "Roisin_said@Roisin_said",
+            "date": "May 22, 2024",
+            "content": "@bridgetphetasy<br>hi all \ud83d\udc4b\ud83c\udffd new subscriber here. But, long time Dumpster Fire fan! Looking forward to moving forward with y'all. With love from Australia \ud83c\udde6\ud83c\uddfa \u2764\ufe0f",
+            "likes": "3",
+            "replies": []
+        },
+        {
+            "comment_id": "8678709",
+            "author": "gbernardwandel@gbernardwandel",
+            "date": "May 07, 2024",
+            "content": "@bridgetphetasy<br>voicing my disappointment in having paid another $50 for a year here only to get emails from Substack with content I cannot access because I didn\u2019t pay there too<br>Major bummer<br>I can\u2019t afford to do both but I\u2019m miffed at the content I can\u2019t see",
+            "likes": "3",
+            "replies": []
+        },
+        {
+            "comment_id": "7456692",
+            "author": "asirb@Bgj9",
+            "date": "October 26, 2023",
+            "content": "@bridgetphetasy<br>How do I join the book club?",
+            "likes": "4",
+            "replies": []
+        },
+        {
+            "comment_id": "7040404",
+            "author": "harn5000@harn5000",
+            "date": "August 30, 2023",
+            "content": "@bridgetphetasy",
+            "likes": "7",
+            "replies": []
+        },
+        {
+            "comment_id": "5470449",
+            "author": "Hope Fischbach@spirospero",
+            "date": "January 16, 2023",
+            "content": "This year's New Year's resolution: grow my income to where I can subscribe to creators I love without worrying that I might get slapped with an overdraft fee when the monthly payment comes around. I love this goal because it's like double motivation. I'm willing to make the extra push at the end of the day or week to get that cash, since I know I'll be investing it in communities that a) give me the sanity to keep going and b) are pushing back against the systems that want to crush us.<br>Stoked to have joined the Pham today :)",
+            "likes": "11",
+            "replies": []
+        },
+        {
+            "comment_id": "5296855",
+            "author": "Clara @ClaraJ",
+            "date": "December 20, 2022",
+            "content": "Hi Everyone,<br>It\u2019s so nice to be here (finally \u2014 this is my Xmas pressie to myself after working my butt off all year).  I adore Bridget and Maggie\u2019s work and I want to support their shenanigans. \ud83d\ude00\ud83d\udc4c",
+            "likes": "10",
+            "replies": []
+        },
+        {
+            "comment_id": "3516666",
+            "author": "Gravy6@Gravy6",
+            "date": "April 07, 2022",
+            "content": "@bridgetphetasy<br>hey new Pham!<br>If I had WOMEN bits, I would had the WOMEN bits removed by say\u2026\u2026. Pre k.<br>Is it  me, or is this my privilege showing\u2026 why am I not  taking full advantage  my \u2026. prison wallet.",
+            "likes": "3",
+            "replies": []
+        },
+        {
+            "comment_id": "3504611",
+            "author": "Gravy6@Gravy6",
+            "date": "April 05, 2022",
+            "content": "WOMEN WOMEN WOMEN WOMEN WOMEN\u2026..  WOMEN!!!!!!!!!!!<br>Love y\u2019all, happy to send some love your way!<br>I lost my mom last August, then shortly after my dad. They where found 4 days later, and I\u2019ve been handling it the best I can.<br>My mom was a absolute bad ass, I will never be able to fill the void. However, as black out drinker at least I\u2019m not looking for the answer at bottom of a bottle.",
+            "likes": "4",
+            "replies": []
+        },
+        {
+            "comment_id": "3374475",
+            "author": "Don't judge me, I'm internet shy@ChickenTooTasty",
+            "date": "March 16, 2022",
+            "content": "@bridgetphetasy<br>Hey, all! I've been listening to Walk-ins Welcome for a while now and finally decided to pull the trigger and see what was going on here. I'm both politically and religiously homeless now so hearing some rhymes in Bridget's story with mine has been great to hear. I'm excited to get to know all y'all!",
+            "likes": "7",
+            "replies": []
+        },
+        {
+            "comment_id": "3371664",
+            "author": "Aoife Mac Mahon@smaoife",
+            "date": "March 16, 2022",
+            "content": "@bridgetphetasy<br>Newbie here. My name is Aoife(Ee-Fa). Finally decided to join after my husband walked into the sitting room whilst I was watching the latest episode and said 'hanging out with your buddies again?'\ud83d\ude02\ud83d\ude48<br>I'm Irish(from Ireland). When I lived in the US I realised when I said i was Irish it didn't necessarily mean I had ever been to Ireland before which was funny to me!<br>Been an immigrant for 7 years now, 3 in Worcester MA, and 4 in Utrecht, The Netherlands. So that politically homeless, fish out of water feeling has been growing on me for years now.<br>My biggest question for now though is why can't i find the 'WOMEN' gif in Whatsapp?? I feel like I would be sending that to people everyday!<br>Anyways, looking forward to hanging out here where nuance and goodwill are the norm and not the exception.",
+            "likes": "4",
+            "replies": []
+        },
+        {
+            "comment_id": "3346657",
+            "author": "NJ Wangphongswsd@ncrw",
+            "date": "March 12, 2022",
+            "content": "@bridgetphetasy<br>Hi! I'm a big fan from Bangkok. I discovered you through Scott Barry Kaufman's podcast and have been listening to Walk-ins Welcome even since! I tried to listen to all of your episodes I think I got about 70ish to go.<br>Thank you \ud83c\udf39 I love what you do and grateful for your voice. I used to lived and study in US for 4 years and have nothing but love and appreciation for your country.",
+            "likes": "5",
+            "replies": []
+        },
+        {
+            "comment_id": "3125318",
+            "author": "Jenn@Small-TownJenn",
+            "date": "February 09, 2022",
+            "content": "@bridgetphetasy<br>Hello Everyone. New person here!  Jenn, 42 and definitely politically homeless, a transitioning liberal for several years now. I'm a Midwestern girl  for life, and have lived in Indiana with my family (husband and 2 sons) for 8 years. Looking forward to getting to know all of the Phetasy Pham!",
+            "likes": "6",
+            "replies": []
+        },
+        {
+            "comment_id": "3036156",
+            "author": "Kevin@cowboykev",
+            "date": "January 29, 2022",
+            "content": "Hi Bridget, Staff, and Pham, new guy here. Love Dumpster Fire and have been watching for a couple of months now. I really enjoy the courageous and heart felt conversation your having with all of us. I also like the balance that Maggie, Sam and the other girls contribute to the show \u2013 don't change a thing. Your my sanity jab and I look forward to the boosters. I live in Virginia and raise cattle among other interests. I'm happy to be here and look forward to making new friends. So the thing that got me to sign up is at the end when you raise your hands in the air and say ( so make me rich! ). I'm a sucker for shameless behavior. So keep me sane!",
+            "likes": "6",
+            "replies": []
+        },
+        {
+            "comment_id": "3033747",
+            "author": "Kristen McIvor@kmcivor10",
+            "date": "January 28, 2022",
+            "content": "@bridgetphetasy<br>Hello everyone! My name is Kristen,  but you can call me Kris! I am 29 and a public librarian. I have been following Bridget for a while via Twitter and YouTube! As well as, her podcast - Walk-Ins Welcome! I live in the northeast USA! I am excited to get to know all of you and have fun whil I am here!",
+            "likes": "5",
+            "replies": []
+        }
+    ],
+    "6736503": [
+        {
+            "comment_id": "10263873",
+            "author": "JaneX@JaneX",
+            "date": "March 08, 2025",
+            "content": "\u201cWe are not our feelings\u201d\u2026yesterday, after a shitty incident at work, which left me in an angry and frustrated mood for the rest of my shift and well into my evening, a little tiny switch flipped in how I describe my feelings, especially anger, which is what I seem to feel most often lately and for a great deal of my life. Repressed anger is a bitch to process. Anyway, I suddenly said to myself, \u201cI feel so fucking angry\u201d as opposed to my usual, \u201cI AM so fucking angry\u201d and it created this little space of detachment in how I identify myself. Saying I feel instead of I am feels a bit better.<br>We are not our feelings. We can feel them, all of them, and then let go. \u2764\ufe0f\u200d\ud83e\ude79",
+            "likes": "1",
+            "replies": []
+        }
+    ],
+    "6736058": [
+        {
+            "comment_id": "10264536",
+            "author": "Sam@speabody",
+            "date": "March 08, 2025",
+            "content": "@Writtenbymurphy<br>I'm trying to figure this thing out. How does this work? It says I need to upgrade, but I thought we were grandfathered in?",
+            "likes": "0",
+            "replies": []
+        },
+        {
+            "comment_id": "10262736",
+            "author": "nansoflo@nansoflo",
+            "date": "March 08, 2025",
+            "content": "@Writtenbymurphy<br>I'm unsubscribed and can\u2019t seem to break in at substack.  Ugh",
+            "likes": "0",
+            "replies": []
+        }
+    ],
+    "6735930": [
+        {
+            "comment_id": "10270157",
+            "author": "Aoife Mac Mahon@smaoife",
+            "date": "14 hours ago",
+            "content": "@EmilyJoy<br>I was already over there \ud83d\ude42 I find the chat function more daunting than this wall format but I will lurking there\ud83d\ude02",
+            "likes": "1",
+            "replies": []
+        }
+    ],
+    "6735760": [
+        {
+            "comment_id": "10262735",
+            "author": "nansoflo@nansoflo",
+            "date": "March 08, 2025",
+            "content": "@JaneX<br>I'm locked out too.  I\u2019m too old for this but will keep trying.  lol",
+            "likes": "1",
+            "replies": []
+        },
+        {
+            "comment_id": "10262015",
+            "author": "Emily Bludworth @EmilyJoy",
+            "date": "March 07, 2025",
+            "content": "Did you get an email? I did on Wednesday\u2026from email with Cora\u2019s contact:<br>If you use a different email on Locals than you do here, you may need to reach out to me to merge your accounts and ensure you can easily stay a long-term member of this community! Reply to this email, and I will get you sorted, or look out for me in the chat this next week!<br>Cora<br>Substack<br>@coralay<br>[email\u00a0protected]",
+            "likes": "2",
+            "replies": []
+        }
+    ],
+    "6734841": [
+        {
+            "comment_id": "10260461",
+            "author": "Kristen McIvor@kmcivor10",
+            "date": "March 07, 2025",
+            "content": "I asked the same question,<br>@Writtenbymurphy<br>!",
+            "likes": "1",
+            "replies": []
+        }
+    ],
+    "6734748": [
+        {
+            "comment_id": "10261064",
+            "author": "murphy daley@Writtenbymurphy",
+            "date": "March 07, 2025",
+            "content": "sorry it was so hard for you\u2026 glad you persevered",
+            "likes": "1",
+            "replies": []
+        },
+        {
+            "comment_id": "10260288",
+            "author": "Kelly@RadiKelly",
+            "date": "March 07, 2025",
+            "content": "Have they posted instructions for those of us who already have an account with Bridget there?",
+            "likes": "0",
+            "replies": []
+        }
+    ],
+    "6734529": [
+        {
+            "comment_id": "10261079",
+            "author": "murphy daley@Writtenbymurphy",
+            "date": "March 07, 2025",
+            "content": "missing you in the \u2018stack chat",
+            "likes": "2",
+            "replies": []
+        },
+        {
+            "comment_id": "10260380",
+            "author": "Bradley Charles@Wonco-the-Sane",
+            "date": "March 07, 2025",
+            "content": "@JaneX",
+            "likes": "2",
+            "replies": []
+        },
+        {
+            "comment_id": "10260285",
+            "author": "murphy daley@Writtenbymurphy",
+            "date": "March 07, 2025",
+            "content": "kitty had to get behinds my head when I was trying to sleep",
+            "likes": "2",
+            "replies": []
+        },
+        {
+            "comment_id": "10260055",
+            "author": "PresidentMuffley@PresidentMuffley",
+            "date": "March 07, 2025",
+            "content": "Not a meme or photo, but I was once caught peeing in a swimming pool. The lifeguard blew his whistle so hard, I almost fell off the diving board!",
+            "likes": "3",
+            "replies": []
+        }
+    ],
+    "6733116": [
+        {
+            "comment_id": "10260194",
+            "author": "ADEPTUS@ADEPTUS",
+            "date": "March 07, 2025",
+            "content": "@EmilyJoy<br>You don't fail to live up to your expectations for yourself, you fail if you stop trying to he better. Your ideal self must remain just out of reach to keep you aspiring. It's the journey that's important and all that.  Just one foot in front of the other is all that is required to prevent failure, and you are doing that so chin up, stiff upper lip etc.. (sounds rude but it's not \ud83d\ude02)<br>Ade x",
+            "likes": "1",
+            "replies": []
+        },
+        {
+            "comment_id": "10258736",
+            "author": "JaneX@JaneX",
+            "date": "March 07, 2025",
+            "content": "You are doing the best you can. I hope you can give yourself credit and a hug for that. Sorry, I haven\u2019t had a chance yet to respond to your comment on my post the other day.",
+            "likes": "1",
+            "replies": []
+        }
+    ],
+    "6732559": [
+        {
+            "comment_id": "10257945",
+            "author": "PresidentMuffley@PresidentMuffley",
+            "date": "March 07, 2025",
+            "content": "Great show. I ignored it for years because I thought it was a fantasy/action show. If I had known it was something like It\u2019s Always Sunny meets Silicon Valley, I would\u2019ve watched it from the beginning.",
+            "likes": "2",
+            "replies": []
+        }
+    ],
+    "6730111": [
+        {
+            "comment_id": "10255894",
+            "author": "Bradley Charles@Wonco-the-Sane",
+            "date": "March 06, 2025",
+            "content": "@kmcivor10<br>Thought I would remain partial to \"Fuck You, I'm Drunk\" by the Dropkick Murphy's but I was wrong. This is way better.",
+            "likes": "1",
+            "replies": []
+        },
+        {
+            "comment_id": "10253308",
+            "author": "Emily Bludworth @EmilyJoy",
+            "date": "March 06, 2025",
+            "content": "No, I haven\u2019t. I wish everyone well except myself...but it\u2019s a great song!",
+            "likes": "3",
+            "replies": []
+        }
+    ],
+    "6727541": [
+        {
+            "comment_id": "10249196",
+            "author": "Bridget@bridgetphetasy",
+            "date": "March 05, 2025",
+            "content": "@atommiller<br>Crazy that there was a pandemic, I've had a baby and we moved to Texas is this short time.",
+            "likes": "3",
+            "replies": []
+        }
+    ]
+};
+
+        function filterPosts() {
+            let searchQuery = document.getElementById("search").value.toLowerCase();
+            let startDate = document.getElementById("startDate").value;
+            let endDate = document.getElementById("endDate").value;
+            let sortOrder = document.getElementById("sortOrder").value;
+
+            let filteredPosts = posts.filter(post => {
+                let matchesSearch = post.content.toLowerCase().includes(searchQuery) ||
+                                   post.author.toLowerCase().includes(searchQuery);
+                let postDate = new Date(post.date);
+                let withinDateRange = (!startDate || postDate >= new Date(startDate)) && 
+                                     (!endDate || postDate <= new Date(endDate));
+                return matchesSearch && withinDateRange;
+            });
+
+            if (sortOrder === "newest") {
+                filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sortOrder === "oldest") {
+                filteredPosts.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortOrder === "most_liked") {
+                filteredPosts.sort((a, b) => b.likes - a.likes);
+            }
+
+            displayPosts(filteredPosts);
+        }
+
+        function displayPosts(filteredPosts) {
+            let postContainer = document.getElementById("posts");
+            postContainer.innerHTML = "";
+            filteredPosts.forEach(post => {
+                let postDiv = document.createElement("div");
+                postDiv.className = "post";
+                postDiv.innerHTML = `
+                    <h3>
+                        <a href='${post.post_url}' target="_blank">${post.post_id}</a>
+                        ${post.is_premium ? " 🔒" : ""}
+                    </h3>
+                    <p><strong>Author:</strong> ${post.author}</p>
+                    <p><strong>Date:</strong> ${new Date(post.date).toLocaleDateString()}</p>
+                    <p>${post.content}</p>
+                    <p><strong>Likes:</strong> ${post.likes} | <strong>Comments:</strong> ${post.comments}</p>
+                `;
+                
+                if (post.images.length) {
+                    postDiv.innerHTML += `<div class='images-container'>${post.images.map(img => `<img src='${img}' class='image'>`).join('')}</div>`;
+                }
+                
+                if (post.video_path) {
+                    postDiv.innerHTML += `
+                    <div class='video-container'>
+                        <video controls width="400">
+                            <source src="${post.video_path}" type="video/mp4">
+                        </video>
+                    </div>`;
+                }
+                
+                if (post.youtube_links.length) {
+                    postDiv.innerHTML += `<div class='youtube-container'>${post.youtube_links.map(link => `<iframe width="400" height="225" src="${link}" frameborder="0" allowfullscreen></iframe>`).join('')}</div>`;
+                }
+                
+                if (comments[post.post_id]) {
+                    postDiv.innerHTML += `
+                    <button class='toggle-button' onclick='toggleComments("${post.post_id}")'>Show Comments</button>
+                    <div id='comments-${post.post_id}' class='comments'>
+                        <h4>Comments:</h4>
+                        ${comments[post.post_id].map(c => `
+                        <div class='comment'>
+                            <p><strong>${c.author}</strong> (${c.date}):</p>
+                            <p>${c.content}</p>
+                            <p><strong>Likes:</strong> ${c.likes}</p>
+                        </div>`).join('')}
+                    </div>`;
+                }
+                postContainer.appendChild(postDiv);
+            });
+        }
+
+        function toggleComments(postId) {
+            var commentsSection = document.getElementById('comments-' + postId);
+            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        filterPosts();
+    </script>
+</body>
+</html>
