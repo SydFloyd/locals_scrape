@@ -9,14 +9,13 @@ def get_comments(session, post_url):
     # Extract comments
     comment_blocks = soup.find_all("div", class_="post answer wcontainer hascomments")
 
-    if len(comment_blocks) == 0:
+    if not comment_blocks:
         return []
 
     post_comments = []
     for comment in comment_blocks:
-        # Extract comment ID
         comment_id = comment.get("id", "").replace("answer-block-", "").strip()
-        
+
         # Extract author
         author_span = comment.find("span", class_="username")
         author = author_span.get_text(strip=True) if author_span else "Unknown"
@@ -33,21 +32,25 @@ def get_comments(session, post_url):
         like_span = comment.find("span", class_="text")
         likes = like_span.get_text(strip=True) if like_span else "0"
 
-        # Extract replies (if any) inside answer-comment-block
+        # Extract replies
         replies = []
-        reply_container = comment.find("div", class_="answer-comment-block")  # Find replies container
+        reply_container = soup.find("div", class_=f"comment-block-{comment_id}")  # Find the correct reply block
 
         if reply_container:
             reply_blocks = reply_container.find_all("div", class_="answer-comment")
 
             for reply in reply_blocks:
-                reply_id = reply.get("data-comment-id")
+                reply_id = reply.get("data-comment-id", "").strip()
+
+                # Extract reply author
                 reply_author_span = reply.find("div", class_="author")
                 reply_author = reply_author_span.get_text(strip=True) if reply_author_span else "Unknown"
 
-                reply_content_span = reply.find("span", class_="comment-text")
+                # Extract reply content
+                reply_content_span = reply.find("span", class_="comment-text formatted")
                 reply_content = reply_content_span.get_text("<br>", strip=True) if reply_content_span else ""
 
+                # Extract reply likes
                 reply_likes_span = reply.find("span", class_="text")
                 reply_likes = reply_likes_span.get_text(strip=True) if reply_likes_span else "0"
 
@@ -58,7 +61,6 @@ def get_comments(session, post_url):
                     "likes": reply_likes
                 })
 
-        # Append extracted comment
         post_comments.append({
             "comment_id": comment_id,
             "author": author,

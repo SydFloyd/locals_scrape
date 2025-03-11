@@ -4,11 +4,6 @@ import json
 with open("assets/my_posts.json", "r", encoding="utf-8") as f:
     posts = json.load(f)
 
-# with open("assets/comments_data.json", "r", encoding="utf-8") as f:
-#     comments_list = json.load(f)
-
-# # Convert comments into a dictionary format
-# comments_dict = {c["post_id"]: c["comments"] for c in comments_list}
 
 # HTML template with JSON data embedded
 html_template = f"""<!DOCTYPE html>

@@ -11,7 +11,7 @@ from utils.parse_date import parse_post_date
 from utils.get_comments import get_comments
 
 MEMBER = "atommiller" # mstranczek
-SCRAPE_COMMENTS = False
+SCRAPE_COMMENTS = True
 
 # Hypothetical login URL and form fields – adapt to match Locals’ actual login flow
 LOGIN_URL = "https://phetasy.locals.com/ajax/ajax.login.php"
@@ -51,8 +51,6 @@ cookies_str = "; ".join([f"{key}={value}" for key, value in session.cookies.item
 # Directories for images and videos
 IMAGE_DIR = "assets/images"
 VIDEO_DIR = "assets/videos"
-os.makedirs(IMAGE_DIR, exist_ok=True)
-os.makedirs(VIDEO_DIR, exist_ok=True)
 
 page = 1
 all_posts = []
@@ -109,15 +107,19 @@ try:
                     image_url = image_tag["href"]
                     image_filename = f"{post_id}_{idx}.jpg"
                     image_path = os.path.join(IMAGE_DIR, image_filename)
-                    try:
-                        img_response = session.get(image_url, headers=headers, stream=True)
-                        if img_response.status_code == 200:
-                            with open(image_path, "wb") as img_file:
-                                for chunk in img_response.iter_content(1024):
-                                    img_file.write(chunk)
-                            post_data["images"].append(image_path)
-                    except Exception as e:
-                        print(f"Error downloading image for post {post_id}: {e}")
+                    if os.path.exists(image_path):
+                        # print("Image already downloaded, skipping!")
+                        post_data["images"].append(image_path)
+                    else:
+                        try:
+                            img_response = session.get(image_url, headers=headers, stream=True)
+                            if img_response.status_code == 200:
+                                with open(image_path, "wb") as img_file:
+                                    for chunk in img_response.iter_content(1024):
+                                        img_file.write(chunk)
+                                post_data["images"].append(image_path)
+                        except Exception as e:
+                            print(f"Error downloading image for post {post_id}: {e}")
             
             # Extract youtube URL(s)
             post_data["youtube_links"] = []
@@ -143,7 +145,8 @@ try:
                 video_filename = f"{post_id}.mp4"
                 video_path = os.path.join(VIDEO_DIR, video_filename)
                 if os.path.exists(video_path):
-                    print("Video already downloaded, skipping!")
+                    # print("Video already downloaded, skipping!")
+                    post_data["video_path"] = video_path
                 else:
                     try:
                         if video_tag["data-src"].split('.')[-1] == "m3u8":
@@ -165,6 +168,7 @@ try:
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
+        break
         if page == 5:
             break
         page += 1
