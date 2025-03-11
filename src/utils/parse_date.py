@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import re
 
-def parse_post_date(raw_time):
+def parse_date(raw_time):
     """
     Parses the date from a post and returns absolute time formatted as ISO 8601 string.
     """

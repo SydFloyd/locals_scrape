@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from utils.parse_date import parse_date
 
 def get_comments(session, post_url):
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -22,7 +23,11 @@ def get_comments(session, post_url):
 
         # Extract date
         date_div = comment.find("div", class_="info")
-        date = date_div.get_text(strip=True) if date_div else "Unknown"
+        date = None
+
+        if date_div:
+            raw_time = date_div.get_text(strip=True)
+            date = parse_date(raw_time)
 
         # Extract comment content (plain text)
         content_div = comment.find("div", class_="text formatted")

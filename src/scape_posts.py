@@ -7,7 +7,7 @@ import re
 from config import cfg
 from utils.ffmpeg_download import ffmpeg_download
 from utils.parse_likes import parse_likes
-from utils.parse_date import parse_post_date
+from utils.parse_date import parse_date
 from utils.get_comments import get_comments
 
 MEMBER = "atommiller" # mstranczek
@@ -97,7 +97,7 @@ try:
 
             if post_date_div:
                 raw_time = post_date_div.get_text(strip=True)
-                post_data["date"] = parse_post_date(raw_time)
+                post_data["date"] = parse_date(raw_time)
             
             # Extract multiple image URLs
             post_data["images"] = []
