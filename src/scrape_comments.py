@@ -41,7 +41,7 @@ else:
     print("Login successful!")
 
 # Load posts JSON
-with open("my_posts.json", "r", encoding="utf-8") as file:
+with open("assets/my_posts.json", "r", encoding="utf-8") as file:
     posts_data = json.load(file)
 
 comments_data = []  # List to store extracted comments

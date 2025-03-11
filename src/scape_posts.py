@@ -55,10 +55,11 @@ all_posts = []
 
 try:
     while True:
-        PROTECTED_URL = f"https://phetasy.locals.com/newsfeed/all/recent?page={page}"
+        # PROTECTED_URL = f"https://phetasy.locals.com/newsfeed/all/recent?page={page}"
+        PROTECTED_URL = f"https://phetasy.locals.com/member/mstranczek/posts?page={page}"
         protected_page = session.get(PROTECTED_URL, headers=headers)
         soup = BeautifulSoup(protected_page.text, "html.parser")
-        posts = soup.find_all("div", class_="wcontainer post")
+        posts = soup.find_all("div", class_="wcontainer profilepost post") # wcontainer post for newsfeed
         if not posts:
             print("No more posts found!")
             break
@@ -161,8 +162,8 @@ try:
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
-        if page == 2:
-            break
+        # if page == 2:
+        #     break
         page += 1
 except Exception as e:
     print(f"Encountered error: {e}")

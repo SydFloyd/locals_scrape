@@ -26,6 +26,9 @@ html_template = f"""<!DOCTYPE html>
         .video-container {{ margin-top: 10px; }}
         .comments {{ margin-top: 10px; padding-left: 15px; border-left: 2px solid #ddd; display: none; }}
         .toggle-button {{ background-color: #008CBA; color: white; border: none; padding: 5px; cursor: pointer; }}
+        .post-footer {{ display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }}
+        .post-likes-comments {{ margin: 0; }}
+        .post-date {{ color: grey; font-size: 0.9em; font-style: italic; margin: 0; }}
     </style>
 </head>
 <body>
@@ -83,9 +86,7 @@ html_template = f"""<!DOCTYPE html>
                         ${{post.is_premium ? " 🔒" : ""}}
                     </h3>
                     <p><strong>Author:</strong> ${{post.author}}</p>
-                    <p><strong>Date:</strong> ${{new Date(post.date).toLocaleDateString()}}</p>
                     <p>${{post.content}}</p>
-                    <p><strong>Likes:</strong> ${{post.likes}} | <strong>Comments:</strong> ${{post.comments}}</p>
                 `;
                 
                 if (post.images.length) {{
@@ -104,6 +105,15 @@ html_template = f"""<!DOCTYPE html>
                 if (post.youtube_links.length) {{
                     postDiv.innerHTML += `<div class='youtube-container'>${{post.youtube_links.map(link => `<iframe width="400" height="225" src="${{link}}" frameborder="0" allowfullscreen></iframe>`).join('')}}</div>`;
                 }}
+
+                postDiv.innerHTML += `
+                    <div class="post-footer">
+                        <p class="post-likes-comments">
+                            <strong>&#10084;</strong> ${{post.likes}} | <strong>&#128172;</strong> ${{post.comments}}
+                        </p>
+                        <p class="post-date">${{new Date(post.date).toLocaleDateString()}}</p>
+                    </div>
+                `;
                 
                 if (comments[post.post_id]) {{
                     postDiv.innerHTML += `
@@ -114,7 +124,7 @@ html_template = f"""<!DOCTYPE html>
                         <div class='comment'>
                             <p><strong>${{c.author}}</strong> (${{c.date}}):</p>
                             <p>${{c.content}}</p>
-                            <p><strong>Likes:</strong> ${{c.likes}}</p>
+                            <p><strong>&#10084;</strong> ${{c.likes}}</p>
                         </div>`).join('')}}
                     </div>`;
                 }}
