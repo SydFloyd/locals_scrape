@@ -11,6 +11,7 @@ from utils.parse_date import parse_post_date
 from utils.get_comments import get_comments
 
 MEMBER = "atommiller" # mstranczek
+SCRAPE_COMMENTS = False
 
 # Hypothetical login URL and form fields – adapt to match Locals’ actual login flow
 LOGIN_URL = "https://phetasy.locals.com/ajax/ajax.login.php"
@@ -158,13 +159,13 @@ try:
                         print(f"Error downloading video for post {post_id}: {e}")
                         post_data["video_path"] = None
 
-            post_data["comment_data"] = comment_data = get_comments(session, post_data["post_url"])
+            if SCRAPE_COMMENTS:
+                post_data["comment_data"] = comment_data = get_comments(session, post_data["post_url"])
             
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
-        break
-        if page == 2:
+        if page == 5:
             break
         page += 1
 except Exception as e:

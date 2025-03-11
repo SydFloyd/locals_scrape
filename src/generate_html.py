@@ -4,11 +4,11 @@ import json
 with open("assets/my_posts.json", "r", encoding="utf-8") as f:
     posts = json.load(f)
 
-with open("assets/comments_data.json", "r", encoding="utf-8") as f:
-    comments_list = json.load(f)
+# with open("assets/comments_data.json", "r", encoding="utf-8") as f:
+#     comments_list = json.load(f)
 
-# Convert comments into a dictionary format
-comments_dict = {c["post_id"]: c["comments"] for c in comments_list}
+# # Convert comments into a dictionary format
+# comments_dict = {c["post_id"]: c["comments"] for c in comments_list}
 
 # HTML template with JSON data embedded
 html_template = f"""<!DOCTYPE html>
@@ -43,23 +43,31 @@ html_template = f"""<!DOCTYPE html>
         <option value="most_liked">Most Liked</option>
     </select>
     <div id="posts"></div>
+    <div id="pagination" style="text-align: center; margin-top: 20px;"></div>
 
     <script>
         let posts = {json.dumps(posts, indent=4)};
-        let comments = {json.dumps(comments_dict, indent=4)};
 
-        function filterPosts() {{
+        let postsPerPage = 25;
+        let currentPage = 1;
+        let filteredPosts = [];
+
+        function filterPosts(resetPage = true) {{
+            if (resetPage) {{
+                currentPage = 1;  // Reset to first page only if applying a new filter
+            }}
+
             let searchQuery = document.getElementById("search").value.toLowerCase();
             let startDate = document.getElementById("startDate").value;
             let endDate = document.getElementById("endDate").value;
             let sortOrder = document.getElementById("sortOrder").value;
 
-            let filteredPosts = posts.filter(post => {{
+            filteredPosts = posts.filter(post => {{
                 let matchesSearch = post.content.toLowerCase().includes(searchQuery) ||
-                                   post.author.toLowerCase().includes(searchQuery);
+                                    post.author.toLowerCase().includes(searchQuery);
                 let postDate = new Date(post.date);
                 let withinDateRange = (!startDate || postDate >= new Date(startDate)) && 
-                                     (!endDate || postDate <= new Date(endDate));
+                                    (!endDate || postDate <= new Date(endDate));
                 return matchesSearch && withinDateRange;
             }});
 
@@ -71,13 +79,18 @@ html_template = f"""<!DOCTYPE html>
                 filteredPosts.sort((a, b) => b.likes - a.likes);
             }}
 
-            displayPosts(filteredPosts);
+            displayPosts();
         }}
 
-        function displayPosts(filteredPosts) {{
+        function displayPosts() {{
             let postContainer = document.getElementById("posts");
             postContainer.innerHTML = "";
-            filteredPosts.forEach(post => {{
+
+            let startIndex = (currentPage - 1) * postsPerPage;
+            let endIndex = startIndex + postsPerPage;
+            let paginatedPosts = filteredPosts.slice(startIndex, endIndex);
+
+            paginatedPosts.forEach(post => {{
                 let postDiv = document.createElement("div");
                 postDiv.className = "post";
                 postDiv.innerHTML = `
@@ -114,30 +127,40 @@ html_template = f"""<!DOCTYPE html>
                         <p class="post-date">${{new Date(post.date).toLocaleDateString()}}</p>
                     </div>
                 `;
-                
-                if (comments[post.post_id]) {{
-                    postDiv.innerHTML += `
-                    <button class='toggle-button' onclick='toggleComments("${{post.post_id}}")'>Show Comments</button>
-                    <div id='comments-${{post.post_id}}' class='comments'>
-                        <h4>Comments:</h4>
-                        ${{comments[post.post_id].map(c => `
-                        <div class='comment'>
-                            <p><strong>${{c.author}}</strong> (${{c.date}}):</p>
-                            <p>${{c.content}}</p>
-                            <p><strong>&#10084;</strong> ${{c.likes}}</p>
-                        </div>`).join('')}}
-                    </div>`;
-                }}
+
                 postContainer.appendChild(postDiv);
             }});
+
+            updatePaginationControls(filteredPosts.length);
         }}
 
-        function toggleComments(postId) {{
-            var commentsSection = document.getElementById('comments-' + postId);
-            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+        function updatePaginationControls(totalPosts) {{
+            let paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = `
+                <button onclick="prevPage()" ${{currentPage === 1 ? "disabled" : ""}}>Previous</button>
+                <span> Page ${{currentPage}} of ${{Math.ceil(totalPosts / postsPerPage)}} </span>
+                <button onclick="nextPage()" ${{currentPage * postsPerPage >= totalPosts ? "disabled" : ""}}>Next</button>
+            `;
+        }}
+
+        function nextPage() {{
+            if (currentPage * postsPerPage < filteredPosts.length) {{
+                currentPage++;
+                displayPosts();
+                window.scrollTo({{ top: 0, behavior: "smooth" }});  // Scroll to top
+            }}
+        }}
+
+        function prevPage() {{
+            if (currentPage > 1) {{
+                currentPage--;
+                displayPosts();
+                window.scrollTo({{ top: 0, behavior: "smooth" }});  // Scroll to top
+            }}
         }}
 
         filterPosts();
+
     </script>
 </body>
 </html>
