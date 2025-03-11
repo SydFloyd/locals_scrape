@@ -197,3 +197,4 @@ pyrightconfig.json
 assets/*
 archived_assets/*
 index.html
+posts/*
