@@ -8,6 +8,9 @@ from config import cfg
 from utils.ffmpeg_download import ffmpeg_download
 from utils.parse_likes import parse_likes
 from utils.parse_date import parse_post_date
+from utils.get_comments import get_comments
+
+MEMBER = "atommiller" # mstranczek
 
 # Hypothetical login URL and form fields – adapt to match Locals’ actual login flow
 LOGIN_URL = "https://phetasy.locals.com/ajax/ajax.login.php"
@@ -56,10 +59,10 @@ all_posts = []
 try:
     while True:
         # PROTECTED_URL = f"https://phetasy.locals.com/newsfeed/all/recent?page={page}"
-        PROTECTED_URL = f"https://phetasy.locals.com/member/mstranczek/posts?page={page}"
+        PROTECTED_URL = f"https://phetasy.locals.com/member/{MEMBER}/posts?page={page}"
         protected_page = session.get(PROTECTED_URL, headers=headers)
         soup = BeautifulSoup(protected_page.text, "html.parser")
-        posts = soup.find_all("div", class_="wcontainer profilepost post") # wcontainer post for newsfeed
+        posts = soup.find_all("div", class_="wcontainer profilepost post") # just "wcontainer post" for newsfeed
         if not posts:
             print("No more posts found!")
             break
@@ -74,10 +77,6 @@ try:
 
             post_url = post.find("div", {"data-post-url": True})
             post_data["post_url"] = post_url["data-post-url"] if post_url else None
-            
-            # Extract the post title
-            # title_element = post.select_one(".title")
-            # post_data["title"] = title_element.get_text(strip=True) if title_element else None
 
             post_text = post.select_one(".formatted.read-more-limited-inner")
             post_data["content"] = post_text.encode_contents().decode("utf-8")  # Extracts raw inner HTML
@@ -158,15 +157,19 @@ try:
                     except Exception as e:
                         print(f"Error downloading video for post {post_id}: {e}")
                         post_data["video_path"] = None
+
+            post_data["comment_data"] = comment_data = get_comments(session, post_data["post_url"])
             
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
-        # if page == 2:
-        #     break
+        break
+        if page == 2:
+            break
         page += 1
 except Exception as e:
     print(f"Encountered error: {e}")
+    raise e
 finally:
     with open("assets/my_posts.json", "w", encoding="utf-8") as f:
         json.dump(all_posts, f, indent=4)
