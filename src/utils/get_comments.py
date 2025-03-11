@@ -52,7 +52,15 @@ def get_comments(session, post_url):
 
                 # Extract reply author
                 reply_author_span = reply.find("div", class_="author")
-                reply_author = reply_author_span.get_text(strip=True) if reply_author_span else "Unknown"
+                reply_author_tag = reply_author_span.find("a") if reply_author_span else None
+                reply_author = reply_author_tag.get_text(strip=True) if reply_author_tag else "Unknown"
+
+                # Extract reply date
+                reply_date_div = reply_author_span.find("div", class_="info") if reply_author_span else None
+                reply_date = None
+                if reply_date_div:
+                    raw_reply_time = reply_date_div.get_text(strip=True)
+                    reply_date = parse_date(raw_reply_time)
 
                 # Extract reply content (plain text)
                 reply_content_span = reply.find("span", class_=f"comment-text formatted comment-holder-{reply_id}")
@@ -68,6 +76,7 @@ def get_comments(session, post_url):
                 replies.append({
                     "reply_id": reply_id,
                     "author": reply_author,
+                    "date": reply_date,
                     "content": reply_content,
                     "content_html": reply_content_html,  # Raw HTML
                     "likes": reply_likes
