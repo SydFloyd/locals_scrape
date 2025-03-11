@@ -24,9 +24,12 @@ def get_comments(session, post_url):
         date_div = comment.find("div", class_="info")
         date = date_div.get_text(strip=True) if date_div else "Unknown"
 
-        # Extract comment content
+        # Extract comment content (plain text)
         content_div = comment.find("div", class_="text formatted")
         content = content_div.get_text("<br>", strip=True) if content_div else ""
+
+        # Extract comment raw HTML
+        content_html = str(content_div) if content_div else ""
 
         # Extract likes
         like_span = comment.find("span", class_="text")
@@ -46,9 +49,12 @@ def get_comments(session, post_url):
                 reply_author_span = reply.find("div", class_="author")
                 reply_author = reply_author_span.get_text(strip=True) if reply_author_span else "Unknown"
 
-                # Extract reply content
-                reply_content_span = reply.find("span", class_="comment-text formatted")
+                # Extract reply content (plain text)
+                reply_content_span = reply.find("span", class_=f"comment-text formatted comment-holder-{reply_id}")
                 reply_content = reply_content_span.get_text("<br>", strip=True) if reply_content_span else ""
+
+                # Extract reply raw HTML
+                reply_content_html = str(reply_content_span) if reply_content_span else ""
 
                 # Extract reply likes
                 reply_likes_span = reply.find("span", class_="text")
@@ -58,6 +64,7 @@ def get_comments(session, post_url):
                     "reply_id": reply_id,
                     "author": reply_author,
                     "content": reply_content,
+                    "content_html": reply_content_html,  # Raw HTML
                     "likes": reply_likes
                 })
 
@@ -66,6 +73,7 @@ def get_comments(session, post_url):
             "author": author,
             "date": date,
             "content": content,
+            "content_html": content_html,  # Raw HTML
             "likes": likes,
             "replies": replies
         })
