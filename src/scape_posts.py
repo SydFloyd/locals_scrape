@@ -51,6 +51,8 @@ cookies_str = "; ".join([f"{key}={value}" for key, value in session.cookies.item
 # Directories for images and videos
 IMAGE_DIR = "assets/images"
 VIDEO_DIR = "assets/videos"
+os.makedirs(IMAGE_DIR, exist_ok=True)
+os.makedirs(VIDEO_DIR, exist_ok=True)
 
 page = 1
 all_posts = []
