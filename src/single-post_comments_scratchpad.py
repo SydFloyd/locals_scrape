@@ -39,7 +39,7 @@ if "Invalid" in login_response.text or login_response.status_code != 200:
 else:
     print("Login successful!")
 
-out = get_comments(session, "https://phetasy.locals.com/post/46856/rock-lives-daily-inspiration-i-love-all-kinds-of-music-rock-pop-rap-electronic-classic")
+out = get_comments(session, "https://phetasy.locals.com/post/6740690/after-a-couple-hours-of-messing-around-my-son-figured-out-how-to-save-off-all-my-posts-from-locals")
 
 from pprint import pprint
 pprint(out)

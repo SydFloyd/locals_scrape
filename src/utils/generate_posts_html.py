@@ -86,22 +86,43 @@ def generate_posts_html(posts):
                 comment_date = comment["date"].split("T")[0] if comment.get("date") else "Unknown"
                 comment_content = comment.get("content_html", comment["content"])  # Use content_html if available
                 
+                # **Include comment images**
+                comment_images_html = (
+                    '<div class="images-container">'
+                    + "".join(f'<img src="../{img}" class="image">' for img in comment.get("images", []))
+                    + "</div>"
+                    if comment.get("images")
+                    else ""
+                )
+
                 comment_section += f"""
                 <div class="comment">
                     <p><strong>{comment['author']}</strong> ({comment_date}):</p>
                     <div>{comment_content}</div>
+                    {comment_images_html}
                     <p class="post-meta">&#10084; {comment['likes']}</p>
                 """
 
+                # Replies
                 if "replies" in comment and comment["replies"]:
                     for reply in comment["replies"]:
                         reply_date = reply["date"].split("T")[0] if reply.get("date") else "Unknown"
                         reply_content = reply.get("content_html", reply["content"])  # Use content_html if available
                         
+                        # **Include reply images**
+                        reply_images_html = (
+                            '<div class="images-container">'
+                            + "".join(f'<img src="../{img}" class="image">' for img in reply.get("images", []))
+                            + "</div>"
+                            if reply.get("images")
+                            else ""
+                        )
+
                         comment_section += f"""
                         <div class="reply">
                             <p><strong>{reply['author']}</strong> ({reply_date}):</p>
                             <div>{reply_content}</div>
+                            {reply_images_html}
                             <p class="post-meta">&#10084; {reply['likes']}</p>
                         </div>
                         """
@@ -128,4 +149,3 @@ def generate_posts_html(posts):
             f.write(post_html)
 
     print("Individual post pages generated in 'posts/' directory.")
-    

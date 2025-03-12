@@ -1,7 +1,14 @@
 from bs4 import BeautifulSoup
+import os
+
 from utils.parse_date import parse_date
 
 def get_comments(session, post_url):
+    COMMENT_IMAGE_DIR = "assets/comment_assets"
+    REPLY_IMAGE_DIR = "assets/reply_assets"
+    os.makedirs(COMMENT_IMAGE_DIR, exist_ok=True)
+    os.makedirs(REPLY_IMAGE_DIR, exist_ok=True)
+
     headers = {"User-Agent": "Mozilla/5.0"}
     response = session.get(post_url, headers=headers)
     response.raise_for_status()
@@ -39,6 +46,29 @@ def get_comments(session, post_url):
             like_span = comment.find("span", class_="text")
             likes = like_span.get_text(strip=True) if like_span else "0"
 
+            # Extract images from the comment
+            images = []
+            image_container = comment.find("div", class_="answer-photos-gallery-container media")
+            if image_container:
+                image_links = image_container.find_all("a", class_="photo")
+                for idx, image_link in enumerate(image_links):
+                    if image_link.has_attr("href"):
+                        image_url = image_link["href"]
+                        image_filename = f"{comment_id}_{idx}.jpg"
+                        image_path = os.path.join(COMMENT_IMAGE_DIR, image_filename)
+                        if os.path.exists(image_path):
+                            images.append(image_path)
+                        else:
+                            try:
+                                img_response = session.get(image_url, headers=headers, stream=True)
+                                if img_response.status_code == 200:
+                                    with open(image_path, "wb") as img_file:
+                                        for chunk in img_response.iter_content(1024):
+                                            img_file.write(chunk)
+                                    images.append(image_path)
+                            except Exception as e:
+                                print(f"Error downloading image for comment {comment_id}: {e}")
+
             # Extract replies (if any exist)
             replies = []
             reply_container = soup.find("div", class_=f"comment-block-{comment_id}")
@@ -72,13 +102,37 @@ def get_comments(session, post_url):
                     reply_likes_span = reply.find("span", class_="text")
                     reply_likes = reply_likes_span.get_text(strip=True) if reply_likes_span else "0"
 
+                    # Extract images from the reply
+                    reply_images = []
+                    reply_image_container = reply.find("div", class_="media")
+                    if reply_image_container:
+                        reply_image_links = reply_image_container.find_all("a", class_="photo")
+                        for idx, reply_image_link in enumerate(reply_image_links):
+                            if reply_image_link.has_attr("href"):
+                                image_url = reply_image_link["href"]
+                                image_filename = f"{reply_id}_{idx}.jpg"
+                                image_path = os.path.join(REPLY_IMAGE_DIR, image_filename)
+                                if os.path.exists(image_path):
+                                    reply_images.append(image_path)
+                                else:
+                                    try:
+                                        img_response = session.get(image_url, headers=headers, stream=True)
+                                        if img_response.status_code == 200:
+                                            with open(image_path, "wb") as img_file:
+                                                for chunk in img_response.iter_content(1024):
+                                                    img_file.write(chunk)
+                                            images.append(image_path)
+                                    except Exception as e:
+                                        print(f"Error downloading image for reply {reply_id}: {e}")
+
                     replies.append({
                         "reply_id": reply_id,
                         "author": reply_author,
                         "date": reply_date,
                         "content": reply_content,
                         "content_html": reply_content_html,  # Raw HTML
-                        "likes": reply_likes
+                        "likes": reply_likes,
+                        "images": reply_images  # Extracted images in replies
                     })
 
             # Append comment to list
@@ -89,6 +143,7 @@ def get_comments(session, post_url):
                 "content": content,
                 "content_html": content_html,  # Raw HTML
                 "likes": likes,
+                "images": images,  # Extracted images
                 "replies": replies
             })
         return output
