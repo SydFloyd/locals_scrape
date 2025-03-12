@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from src.utils.parse_date import parse_date
+from utils.parse_date import parse_date
 
 def get_comments(session, post_url):
     headers = {"User-Agent": "Mozilla/5.0"}

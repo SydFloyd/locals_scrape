@@ -4,8 +4,8 @@ import json
 import os
 import re
 
-from src.config import cfg
-from src.utils.get_comments import get_comments
+from config import cfg
+from utils.get_comments import get_comments
 
 # Hypothetical login URL and form fields – adapt to match Locals’ actual login flow
 LOGIN_URL = "https://phetasy.locals.com/ajax/ajax.login.php"
