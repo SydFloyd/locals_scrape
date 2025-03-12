@@ -168,9 +168,6 @@ try:
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
-        break
-        if page == 5:
-            break
         page += 1
 except Exception as e:
     print(f"Encountered error: {e}")

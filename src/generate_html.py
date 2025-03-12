@@ -175,6 +175,4 @@ with open("index.html", "w", encoding="utf-8") as f:
 print("HTML file generated: index.html")
 
 
-generate_posts_html
-
-print("Individual post pages generated in 'posts/' directory.")
+generate_posts_html(posts)
