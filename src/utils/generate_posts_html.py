@@ -23,7 +23,7 @@ def generate_posts_html(posts):
         </style>
     </head>
     <body>
-        <a href="../index.html" class="back-link">&larr; Back to Post Archive</a>
+        <a href="../index.html" class="back-link" onclick="restoreScroll()">← Back to Post Archive</a>
         <div class="post">
             <h2>Post by {author}</h2>
             <p><strong>Date:</strong> {date}</p>
@@ -37,8 +37,13 @@ def generate_posts_html(posts):
         <h3>Comments ({comments})</h3>
         {comment_section}
 
-        <a href="../index.html" class="back-link">&larr; Back to Post Archive</a>
+        <a href="../index.html" class="back-link" onclick="restoreScroll()">← Back to Post Archive</a>
     </body>
+    <script>
+        function restoreScroll() {{
+            sessionStorage.setItem("returningFromPost", "true");
+        }}
+    </script>
     </html>"""
 
     for post in posts:

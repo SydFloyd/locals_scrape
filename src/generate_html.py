@@ -5,7 +5,6 @@ from utils.generate_posts_html import generate_posts_html
 with open("assets/my_posts.json", "r", encoding="utf-8") as f:
     posts = json.load(f)
 
-
 # HTML template with JSON data embedded
 html_template = f"""<!DOCTYPE html>
 <html lang="en">
@@ -42,6 +41,37 @@ html_template = f"""<!DOCTYPE html>
     <div id="pagination" style="text-align: center; margin-top: 20px;"></div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {{
+            // Restore state if user is returning from a post
+            if (sessionStorage.getItem("returningFromPost") === "true") {{
+                let savedPage = sessionStorage.getItem("currentPage");
+                let savedScroll = sessionStorage.getItem("scrollPosition");
+                console.log(savedPage)
+                console.log(savedScroll)
+
+                if (savedPage) {{
+                    currentPage = parseInt(savedPage, 10);
+                    displayPosts();
+                }}
+
+                if (savedScroll) {{
+                    setTimeout(() => window.scrollTo(0, savedScroll), 100);
+                }}
+
+                sessionStorage.removeItem("returningFromPost"); // Clear flag
+            }} else {{
+                filterPosts(); // Initial page load logic
+            }}
+        }});
+
+        // Store scroll position and page when navigating to a post
+        document.addEventListener("click", function (e) {{
+            if (e.target.tagName === "A" && e.target.href.includes("posts/")) {{
+                sessionStorage.setItem("scrollPosition", window.scrollY);
+                sessionStorage.setItem("currentPage", currentPage);
+            }}
+        }});
+
         let posts = {json.dumps(posts, indent=4)};
 
         let postsPerPage = 25;
