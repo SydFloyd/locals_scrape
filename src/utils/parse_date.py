@@ -12,7 +12,9 @@ def parse_date(raw_time):
         num, unit = relative_match.groups()
         num = int(num)
         
-        if "minute" in unit:
+        if "second" in unit:
+            absolute_time = now - timedelta(seconds=num)
+        elif "minute" in unit:
             absolute_time = now - timedelta(minutes=num)
         elif "hour" in unit:
             absolute_time = now - timedelta(hours=num)
