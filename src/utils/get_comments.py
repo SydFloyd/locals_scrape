@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import os
-
+import re
 from utils.parse_date import parse_date
 
 def get_comments(session, post_url):
@@ -35,12 +35,24 @@ def get_comments(session, post_url):
                 raw_time = date_div.get_text(strip=True)
                 date = parse_date(raw_time)
 
-            # Extract comment content (plain text)
+            # Extract comment raw HTML but **remove media elements**
             content_div = comment.find("div", class_="text formatted")
-            content = content_div.get_text("<br>", strip=True) if content_div else ""
-
-            # Extract comment raw HTML
             content_html = str(content_div) if content_div else ""
+            content_soup = BeautifulSoup(content_html, "html.parser")
+
+            # Remove images and videos
+            for tag in content_soup(["img", "video", "iframe", "div"]):
+                tag.decompose()
+
+            # Extract content text while preserving line breaks
+            content_text = content_soup.get_text("<br>", strip=True)
+
+            # Extract YouTube links
+            youtube_links = []
+            for iframe in comment.find_all("iframe"):
+                src = iframe.get("src", "")
+                if "youtube.com" in src or "youtu.be" in src:
+                    youtube_links.append(src)
 
             # Extract likes
             like_span = comment.find("span", class_="text")
@@ -91,12 +103,24 @@ def get_comments(session, post_url):
                         raw_reply_time = reply_date_div.get_text(strip=True)
                         reply_date = parse_date(raw_reply_time)
 
-                    # Extract reply content (plain text)
+                    # Extract reply raw HTML but remove media
                     reply_content_span = reply.find("span", class_=f"comment-text formatted comment-holder-{reply_id}")
-                    reply_content = reply_content_span.get_text("<br>", strip=True) if reply_content_span else ""
-
-                    # Extract reply raw HTML
                     reply_content_html = str(reply_content_span) if reply_content_span else ""
+                    reply_content_soup = BeautifulSoup(reply_content_html, "html.parser")
+
+                    # Remove images and videos
+                    for tag in reply_content_soup(["img", "video", "iframe", "div"]):
+                        tag.decompose()
+
+                    # Extract reply content text while preserving line breaks
+                    reply_content_text = reply_content_soup.get_text("<br>", strip=True)
+
+                    # Extract YouTube links in reply
+                    reply_youtube_links = []
+                    for iframe in reply.find_all("iframe"):
+                        src = iframe.get("src", "")
+                        if "youtube.com" in src or "youtu.be" in src:
+                            reply_youtube_links.append(src)
 
                     # Extract reply likes
                     reply_likes_span = reply.find("span", class_="text")
@@ -121,7 +145,7 @@ def get_comments(session, post_url):
                                             with open(image_path, "wb") as img_file:
                                                 for chunk in img_response.iter_content(1024):
                                                     img_file.write(chunk)
-                                            images.append(image_path)
+                                            reply_images.append(image_path)
                                     except Exception as e:
                                         print(f"Error downloading image for reply {reply_id}: {e}")
 
@@ -129,10 +153,11 @@ def get_comments(session, post_url):
                         "reply_id": reply_id,
                         "author": reply_author,
                         "date": reply_date,
-                        "content": reply_content,
-                        "content_html": reply_content_html,  # Raw HTML
+                        "content": reply_content_text,
+                        "content_html": str(reply_content_soup),  # Stripped HTML
+                        "youtube_links": reply_youtube_links,
                         "likes": reply_likes,
-                        "images": reply_images  # Extracted images in replies
+                        "images": reply_images
                     })
 
             # Append comment to list
@@ -140,12 +165,14 @@ def get_comments(session, post_url):
                 "comment_id": comment_id,
                 "author": author,
                 "date": date,
-                "content": content,
-                "content_html": content_html,  # Raw HTML
+                "content": content_text,
+                "content_html": str(content_soup),  # Stripped HTML
+                "youtube_links": youtube_links,
                 "likes": likes,
-                "images": images,  # Extracted images
+                "images": images,
                 "replies": replies
             })
+
         return output
     
     comments_1 = extract_comments(1)
