@@ -41,7 +41,7 @@ def get_comments(session, post_url):
             content_soup = BeautifulSoup(content_html, "html.parser")
 
             # Remove images and videos
-            for tag in content_soup(["img", "video", "iframe", "div"]):
+            for tag in content_soup(["img", "video", "iframe"]):
                 tag.decompose()
 
             # Extract content text while preserving line breaks
@@ -109,7 +109,7 @@ def get_comments(session, post_url):
                     reply_content_soup = BeautifulSoup(reply_content_html, "html.parser")
 
                     # Remove images and videos
-                    for tag in reply_content_soup(["img", "video", "iframe", "div"]):
+                    for tag in reply_content_soup(["img", "video", "iframe"]):
                         tag.decompose()
 
                     # Extract reply content text while preserving line breaks
