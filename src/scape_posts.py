@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from time import sleep
 import requests
 import json
 import os
@@ -37,8 +38,22 @@ if csrf_token:
     payload["token"] = csrf_token
 
 # Attempt to log in
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Connection": "keep-alive",
+    "Referer": LOGIN_URL,
+    "Origin": "https://phetasy.locals.com",
+    "Upgrade-Insecure-Requests": "1",
+    "DNT": "1",
+    "Cache-Control": "max-age=0"
+}
 headers = {"User-Agent": "Mozilla/5.0"}
 login_response = session.post(LOGIN_URL, data=payload, headers=headers)
+print(login_response.text)
 if "Invalid" in login_response.text or login_response.status_code != 200:
     print("Login failed!")
     exit(1)
@@ -171,6 +186,7 @@ try:
 
         print(f"Scraped page {page}")
         page += 1
+        sleep(0.1)
 except Exception as e:
     print(f"Encountered error: {e}")
     raise e
