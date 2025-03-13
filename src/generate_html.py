@@ -17,7 +17,7 @@ html_template = f"""<!DOCTYPE html>
         input, select, button {{ margin: 5px; padding: 5px; }}
         .post {{ border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }}
         .images-container, .youtube-container {{ display: flex; gap: 10px; overflow-x: auto; padding: 5px; }}
-        .image {{ max-width: 300px; height: auto; display: block; }}
+        .image {{ max-width: 300px; max-height: 300px; height: auto; width: auto; object-fit: contain; display: block; }}
         .video-container {{ margin-top: 10px; }}
         .comments {{ margin-top: 10px; padding-left: 15px; border-left: 2px solid #ddd; display: none; }}
         .toggle-button {{ background-color: #008CBA; color: white; border: none; padding: 5px; cursor: pointer; }}

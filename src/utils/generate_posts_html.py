@@ -18,7 +18,7 @@ def generate_posts_html(posts):
             .post-meta {{ color: grey; font-size: 0.9em; }}
             .back-link {{ display: block; margin-top: 20px; text-decoration: none; font-size: 1.2em; }}
             .images-container, .youtube-container {{ display: flex; gap: 10px; overflow-x: auto; padding: 5px; }}
-            .image {{ max-width: 300px; height: auto; display: block; }}
+            .image {{ max-width: 300px; max-height: 300px; height: auto; width: auto; object-fit: contain; display: block; }}
             .video-container {{ margin-top: 10px; }}
         </style>
     </head>
@@ -79,14 +79,14 @@ def generate_posts_html(posts):
             else ""
         )
 
-        # Comments Section (Using content_html when available)
+        # Comments Section
         comment_section = ""
         if post.get("comment_data"):
             for comment in post["comment_data"]:
                 comment_date = comment["date"].split("T")[0] if comment.get("date") else "Unknown"
                 comment_content = comment.get("content_html", comment["content"])  # Use content_html if available
                 
-                # **Include comment images**
+                # Comment Images
                 comment_images_html = (
                     '<div class="images-container">'
                     + "".join(f'<img src="../{img}" class="image">' for img in comment.get("images", []))
@@ -95,21 +95,31 @@ def generate_posts_html(posts):
                     else ""
                 )
 
+                # Comment YouTube Videos
+                comment_youtube_html = (
+                    '<div class="youtube-container">'
+                    + "".join(f'<iframe width="400" height="225" src="{yt}" frameborder="0" allowfullscreen></iframe>' for yt in comment.get("youtube_links", []))
+                    + "</div>"
+                    if comment.get("youtube_links")
+                    else ""
+                )
+
                 comment_section += f"""
                 <div class="comment">
                     <p><strong>{comment['author']}</strong> ({comment_date}):</p>
                     <div>{comment_content}</div>
                     {comment_images_html}
+                    {comment_youtube_html}
                     <p class="post-meta">&#10084; {comment['likes']}</p>
                 """
 
-                # Replies
+                # Replies (including YouTube embeds)
                 if "replies" in comment and comment["replies"]:
                     for reply in comment["replies"]:
                         reply_date = reply["date"].split("T")[0] if reply.get("date") else "Unknown"
                         reply_content = reply.get("content_html", reply["content"])  # Use content_html if available
                         
-                        # **Include reply images**
+                        # Reply Images
                         reply_images_html = (
                             '<div class="images-container">'
                             + "".join(f'<img src="../{img}" class="image">' for img in reply.get("images", []))
@@ -118,11 +128,21 @@ def generate_posts_html(posts):
                             else ""
                         )
 
+                        # Reply YouTube Videos
+                        reply_youtube_html = (
+                            '<div class="youtube-container">'
+                            + "".join(f'<iframe width="400" height="225" src="{yt}" frameborder="0" allowfullscreen></iframe>' for yt in reply.get("youtube_links", []))
+                            + "</div>"
+                            if reply.get("youtube_links")
+                            else ""
+                        )
+
                         comment_section += f"""
                         <div class="reply">
                             <p><strong>{reply['author']}</strong> ({reply_date}):</p>
                             <div>{reply_content}</div>
                             {reply_images_html}
+                            {reply_youtube_html}
                             <p class="post-meta">&#10084; {reply['likes']}</p>
                         </div>
                         """
