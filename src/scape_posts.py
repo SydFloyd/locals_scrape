@@ -40,7 +40,6 @@ if csrf_token:
 # Attempt to log in
 headers = {"User-Agent": "Mozilla/5.0"}
 login_response = session.post(LOGIN_URL, data=payload, headers=headers)
-print(login_response.text)
 if "Invalid" in login_response.text or login_response.status_code != 200:
     print("Login failed!")
     exit(1)
