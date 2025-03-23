@@ -42,17 +42,20 @@ html_template = f"""<!DOCTYPE html>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {{
-            // Restore state if user is returning from a post
             if (sessionStorage.getItem("returningFromPost") === "true") {{
+                document.getElementById("search").value = sessionStorage.getItem("searchQuery") || "";
+                document.getElementById("startDate").value = sessionStorage.getItem("startDate") || "";
+                document.getElementById("endDate").value = sessionStorage.getItem("endDate") || "";
+                document.getElementById("sortOrder").value = sessionStorage.getItem("sortOrder") || "newest";
+
                 let savedPage = sessionStorage.getItem("currentPage");
                 let savedScroll = sessionStorage.getItem("scrollPosition");
-                console.log(savedPage)
-                console.log(savedScroll)
 
                 if (savedPage) {{
                     currentPage = parseInt(savedPage, 10);
-                    displayPosts();
                 }}
+
+                filterPosts(false); // Don't reset page
 
                 if (savedScroll) {{
                     setTimeout(() => window.scrollTo(0, savedScroll), 100);
@@ -60,15 +63,29 @@ html_template = f"""<!DOCTYPE html>
 
                 sessionStorage.removeItem("returningFromPost"); // Clear flag
             }} else {{
-                filterPosts(); // Initial page load logic
+                filterPosts(); // Initial load
             }}
         }});
+
+
+        document.getElementById("search").addEventListener("keydown", function (event) {{
+            if (event.key === "Enter") {{
+                event.preventDefault();  // Prevent form submission or accidental behavior
+                filterPosts();
+            }}
+        }});
+
 
         // Store scroll position and page when navigating to a post
         document.addEventListener("click", function (e) {{
             if (e.target.tagName === "A" && e.target.href.includes("posts/")) {{
                 sessionStorage.setItem("scrollPosition", window.scrollY);
                 sessionStorage.setItem("currentPage", currentPage);
+                sessionStorage.setItem("searchQuery", document.getElementById("search").value);
+                sessionStorage.setItem("startDate", document.getElementById("startDate").value);
+                sessionStorage.setItem("endDate", document.getElementById("endDate").value);
+                sessionStorage.setItem("sortOrder", document.getElementById("sortOrder").value);
+                sessionStorage.setItem("returningFromPost", "true");
             }}
         }});
 
