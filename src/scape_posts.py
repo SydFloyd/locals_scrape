@@ -1,12 +1,14 @@
 from bs4 import BeautifulSoup
 from time import sleep
 import requests
+import asyncio
+import aiohttp
 import json
 import os
 import re
 
 from config import cfg
-from utils.ffmpeg_download import ffmpeg_download
+from utils.ffmpeg_download import async_ffmpeg_download, async_direct_video_download
 from utils.parse_likes import parse_likes
 from utils.parse_date import parse_date
 from utils.get_comments import get_comments
@@ -56,8 +58,9 @@ VIDEO_DIR = "assets/videos"
 os.makedirs(IMAGE_DIR, exist_ok=True)
 os.makedirs(VIDEO_DIR, exist_ok=True)
 
-page = 1
+page = 50
 all_posts = []
+video_tasks = []
 
 PAUSE_INTERVAL = 2
 
@@ -154,23 +157,15 @@ try:
                 video_url = "https://phetasy.locals.com" + video_tag["data-src"]
                 video_filename = f"{post_id}.mp4"
                 video_path = os.path.join(VIDEO_DIR, video_filename)
-                if os.path.exists(video_path):
-                    # print("Video already downloaded, skipping!")
-                    post_data["video_path"] = video_path
-                else:
-                    try:
-                        if video_tag["data-src"].split('.')[-1] == "m3u8":
-                            ffmpeg_download(video_url, video_path, cookies_str)
-                        else:
-                            vid_response = session.get(video_url, headers=headers, stream=True)
-                            if vid_response.status_code == 200:
-                                with open(video_path, "wb") as vid_file:
-                                    for chunk in vid_response.iter_content(1024):
-                                        vid_file.write(chunk)
-                        post_data["video_path"] = video_path
-                    except Exception as e:
-                        print(f"Error downloading video for post {post_id}: {e}")
-                        post_data["video_path"] = None
+                post_data["video_path"] = video_path
+
+                if not os.path.exists(video_path):
+                    if video_url.endswith(".m3u8"):
+                        video_tasks.append(async_ffmpeg_download(video_url, video_path, cookies_str))
+                        print(f"Added ffmpeg download task for: {video_path}")
+                    else:
+                        video_tasks.append(async_direct_video_download(video_url, video_path, session))  # aiohttp session
+                        print(f"Added direct download task for: {video_path}")
 
             if SCRAPE_COMMENTS:
                 post_data["comment_data"] = get_comments(session, post_data["post_url"])
@@ -179,7 +174,11 @@ try:
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
-        # store the page 
+        # pickle the page number
+        with open("assets/page_number.txt", "w") as f:
+            f.write(str(page))
+        if page == 53:
+            break
         page += 1
         sleep(PAUSE_INTERVAL)
 except Exception as e:
@@ -189,3 +188,13 @@ finally:
     with open("assets/my_posts.json", "w", encoding="utf-8") as f:
         json.dump(all_posts, f, indent=4)
     print("All posts saved!")
+
+    if len(video_tasks) > 0:
+        print("Running video tasks...")
+         # Run video tasks
+
+        async def run_video_tasks():
+            async with aiohttp.ClientSession(cookies=session.cookies.get_dict(), headers=headers) as aio_sess:
+                await asyncio.gather(*(task if "aiohttp" in str(task) else task for task in video_tasks))
+
+        asyncio.run(run_video_tasks())
