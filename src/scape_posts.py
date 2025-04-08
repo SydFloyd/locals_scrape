@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from time import sleep
+from time import sleep, time
 import requests
 import asyncio
 import aiohttp
@@ -47,7 +47,7 @@ if "Invalid" in login_response.text or login_response.status_code != 200:
     print("Login failed!")
     exit(1)
 else:
-    print("Login successful!")
+    print("Login successful!", flush=True)
 
 # Extract session cookies as a string for ffmpeg
 cookies_str = "; ".join([f"{key}={value}" for key, value in session.cookies.items()])
@@ -58,14 +58,29 @@ VIDEO_DIR = "assets/videos"
 os.makedirs(IMAGE_DIR, exist_ok=True)
 os.makedirs(VIDEO_DIR, exist_ok=True)
 
-page = 50
-all_posts = []
+# Get already scraped post ids
+if os.path.exists("assets/my_posts.json"):
+    with open("assets/my_posts.json", "r", encoding="utf-8") as f:
+        all_posts = json.load(f)
+all_post_ids = {post["post_id"] for post in all_posts} if all_posts else set()
+print("Already scraped post IDs:", len(all_post_ids))
+
+if os.path.exists("assets/page_number.txt"):
+    with open("assets/page_number.txt", "r") as f:
+        page = int(f.read().strip()) - 2
+else:
+    page = 1
+print("Starting from page:", page)
 video_tasks = []
 
 PAUSE_INTERVAL = 2
 
 try:
     while True:
+        # initialize the page number
+        t0 = time()
+        cached_count = 0
+
         if SCAPE_USER_OR_ALL == "user":
             PROTECTED_URL = f"https://phetasy.locals.com/member/{MEMBER}/posts?page={page}"
             posts_class = "wcontainer profilepost post"
@@ -80,10 +95,15 @@ try:
             break
 
         for post in posts:
+            print(".", end="", flush=True)
             post_data = {}
 
             post_id = post.get("data-id")
             post_data["post_id"] = post_id
+
+            # Check if the post is already cached
+            if post_id in all_post_ids:
+                continue
 
             post_data["author"] = post.get("data-author")
 
@@ -121,8 +141,8 @@ try:
                     image_filename = f"{post_id}_{idx}.jpg"
                     image_path = os.path.join(IMAGE_DIR, image_filename)
                     if os.path.exists(image_path):
-                        # print("Image already downloaded, skipping!")
                         post_data["images"].append(image_path)
+                        cached_count += 1
                     else:
                         try:
                             img_response = session.get(image_url, headers=headers, stream=True)
@@ -153,19 +173,29 @@ try:
             
             # Extract videos
             video_tag = post.select_one("video source[data-src]")
+            video_container = post.select_one("video")
             if video_tag:
-                video_url = "https://phetasy.locals.com" + video_tag["data-src"]
-                video_filename = f"{post_id}.mp4"
-                video_path = os.path.join(VIDEO_DIR, video_filename)
-                post_data["video_path"] = video_path
+                post_url = video_container.get("data-post-url", "")
+    
+                # Skip videos with "dumpster-fire-" in the post URL
+                if "dumpster-fire-" in post_url:
+                    print("🔥", end="", flush=True)
+                    post_data["video_path"] = "dumpster-fire"
+                else:
+                    video_url = "https://phetasy.locals.com" + video_tag["data-src"]
+                    video_filename = f"{post_id}.mp4"
+                    video_path = os.path.join(VIDEO_DIR, video_filename)
+                    post_data["video_path"] = video_path
 
-                if not os.path.exists(video_path):
-                    if video_url.endswith(".m3u8"):
-                        video_tasks.append(async_ffmpeg_download(video_url, video_path, cookies_str))
-                        print(f"Added ffmpeg download task for: {video_path}")
+                    if not os.path.exists(video_path):
+                        if video_url.endswith(".m3u8"):
+                            video_tasks.append(asyncio.create_task(async_ffmpeg_download(video_url, video_path, cookies_str)))
+                            print(f"Added ffmpeg download task for: {video_path}")
+                        else:
+                            video_tasks.append(asyncio.create_task(async_direct_video_download(video_url, video_path, session)))  # aiohttp session
+                            print(f"Added direct download task for: {video_path}")
                     else:
-                        video_tasks.append(async_direct_video_download(video_url, video_path, session))  # aiohttp session
-                        print(f"Added direct download task for: {video_path}")
+                        cached_count += 1
 
             if SCRAPE_COMMENTS:
                 post_data["comment_data"] = get_comments(session, post_data["post_url"])
@@ -173,21 +203,22 @@ try:
             
             all_posts.append(post_data)
 
-        print(f"Scraped page {page}")
+        print(f"\nScraped page {page} ({len(posts)} posts - {cached_count} cached) in {time() - t0:.2f} seconds")
         # pickle the page number
         with open("assets/page_number.txt", "w") as f:
             f.write(str(page))
-        if page == 53:
-            break
         page += 1
         sleep(PAUSE_INTERVAL)
 except Exception as e:
     print(f"Encountered error: {e}")
     raise e
 finally:
+    with open("assets/page_number.txt", "w") as f:
+        f.write(str(page))
+
     with open("assets/my_posts.json", "w", encoding="utf-8") as f:
         json.dump(all_posts, f, indent=4)
-    print("All posts saved!")
+    print("\nAll posts saved!")
 
     if len(video_tasks) > 0:
         print("Running video tasks...")
