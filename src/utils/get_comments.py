@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import os
-from time import sleep
 from utils.parse_date import parse_date
 
 def get_comments(session, post_url):
@@ -180,5 +179,4 @@ def get_comments(session, post_url):
 
     post_comments = comments_1 + comments_2
 
-    sleep(.25)
     return post_comments

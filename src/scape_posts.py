@@ -12,6 +12,7 @@ from utils.parse_date import parse_date
 from utils.get_comments import get_comments
 
 MEMBER = "atommiller" # mstranczek
+SCAPE_USER_OR_ALL = "all" # "user" or "all"
 SCRAPE_COMMENTS = True
 
 # Hypothetical login URL and form fields – adapt to match Locals’ actual login flow
@@ -58,13 +59,19 @@ os.makedirs(VIDEO_DIR, exist_ok=True)
 page = 1
 all_posts = []
 
+PAUSE_INTERVAL = 2
+
 try:
     while True:
-        # PROTECTED_URL = f"https://phetasy.locals.com/newsfeed/all/recent?page={page}"
-        PROTECTED_URL = f"https://phetasy.locals.com/member/{MEMBER}/posts?page={page}"
+        if SCAPE_USER_OR_ALL == "user":
+            PROTECTED_URL = f"https://phetasy.locals.com/member/{MEMBER}/posts?page={page}"
+            posts_class = "wcontainer profilepost post"
+        else:  
+            PROTECTED_URL = f"https://phetasy.locals.com/newsfeed/all/recent?page={page}"
+            posts_class = "wcontainer post"
         protected_page = session.get(PROTECTED_URL, headers=headers)
         soup = BeautifulSoup(protected_page.text, "html.parser")
-        posts = soup.find_all("div", class_="wcontainer profilepost post") # just "wcontainer post" for newsfeed
+        posts = soup.find_all("div", class_=posts_class)
         if not posts:
             print("No more posts found!")
             break
@@ -166,13 +173,15 @@ try:
                         post_data["video_path"] = None
 
             if SCRAPE_COMMENTS:
-                post_data["comment_data"] = comment_data = get_comments(session, post_data["post_url"])
+                post_data["comment_data"] = get_comments(session, post_data["post_url"])
+                sleep(PAUSE_INTERVAL)
             
             all_posts.append(post_data)
 
         print(f"Scraped page {page}")
+        # store the page 
         page += 1
-        sleep(0.1)
+        sleep(PAUSE_INTERVAL)
 except Exception as e:
     print(f"Encountered error: {e}")
     raise e
