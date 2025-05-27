@@ -42,7 +42,7 @@ async def async_ffmpeg_download(m3u8_url, output_path, cookies_str):
         if os.path.exists(output_path):
             os.remove(output_path)
 
-async def async_direct_video_download(url, output_path, session):
+async def async_direct_video_download(url, output_path, session: aiohttp.ClientSession):
     async with session.get(url) as resp:
         if resp.status == 200:
             with open(output_path, "wb") as f:

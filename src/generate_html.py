@@ -3,7 +3,19 @@ from utils.generate_posts_html import generate_posts_html
 
 # Load JSON data from files
 with open("assets/my_posts.json", "r", encoding="utf-8") as f:
-    posts = json.load(f)
+    raw_posts = json.load(f)
+
+# add blank content to posts without
+
+inputed_posts = []
+for post in raw_posts:
+    post_copy = post.copy()
+    if not post_copy.get('content'):
+        post_copy['content'] = ""
+    post_copy['comment_data'] = []
+    inputed_posts.append(post_copy)
+
+posts = inputed_posts
 
 # HTML template with JSON data embedded
 html_template = f"""<!DOCTYPE html>
@@ -222,4 +234,4 @@ with open("index.html", "w", encoding="utf-8") as f:
 print("HTML file generated: index.html")
 
 
-generate_posts_html(posts)
+generate_posts_html(raw_posts)

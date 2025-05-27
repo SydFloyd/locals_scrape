@@ -47,12 +47,12 @@ def generate_posts_html(posts):
     </html>"""
 
     for post in posts:
-        post_id = post["post_id"]
-        author = post["author"]
-        date = post["date"].split("T")[0] if post["date"] else "Unknown"
-        content = post["content"]
-        likes = post["likes"]
-        comments = post["comments"]
+        post_id = post.get("post_id")
+        author = post.get("author")
+        date = post["date"].split("T")[0] if post.get("date") else "Unknown"
+        content = post.get("content")
+        likes = post.get("likes")
+        comments = post.get("comments")
 
         # Images
         images = (
@@ -66,7 +66,7 @@ def generate_posts_html(posts):
         # Video
         videos = (
             f'<div class="video-container"><video controls width="400"><source src="../{post["video_path"]}" type="video/mp4"></video></div>'
-            if "video_path" in post and post["video_path"]
+            if "video_path" in post and post.get("video_path")
             else ""
         )
 
@@ -84,7 +84,7 @@ def generate_posts_html(posts):
         if post.get("comment_data"):
             for comment in post["comment_data"]:
                 comment_date = comment["date"].split("T")[0] if comment.get("date") else "Unknown"
-                comment_content = comment.get("content_html", comment["content"])  # Use content_html if available
+                comment_content = comment.get("content_html", comment.get("content", ""))  # Use content_html if available
                 
                 # Comment Images
                 comment_images_html = (
@@ -106,18 +106,18 @@ def generate_posts_html(posts):
 
                 comment_section += f"""
                 <div class="comment">
-                    <p><strong>{comment['author']}</strong> ({comment_date}):</p>
+                    <p><strong>{comment.get('author')}</strong> ({comment_date}):</p>
                     <div>{comment_content}</div>
                     {comment_images_html}
                     {comment_youtube_html}
-                    <p class="post-meta">&#10084; {comment['likes']}</p>
+                    <p class="post-meta">&#10084; {comment.get('likes')}</p>
                 """
 
                 # Replies (including YouTube embeds)
-                if "replies" in comment and comment["replies"]:
+                if "replies" in comment and comment.get("replies"):
                     for reply in comment["replies"]:
                         reply_date = reply["date"].split("T")[0] if reply.get("date") else "Unknown"
-                        reply_content = reply.get("content_html", reply["content"])  # Use content_html if available
+                        reply_content = reply.get("content_html", reply.get("content"))  # Use content_html if available
                         
                         # Reply Images
                         reply_images_html = (
@@ -139,11 +139,11 @@ def generate_posts_html(posts):
 
                         comment_section += f"""
                         <div class="reply">
-                            <p><strong>{reply['author']}</strong> ({reply_date}):</p>
+                            <p><strong>{reply.get('author')}</strong> ({reply_date}):</p>
                             <div>{reply_content}</div>
                             {reply_images_html}
                             {reply_youtube_html}
-                            <p class="post-meta">&#10084; {reply['likes']}</p>
+                            <p class="post-meta">&#10084; {reply.get('likes')}</p>
                         </div>
                         """
                 comment_section += "</div>"
