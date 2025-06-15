@@ -58,6 +58,8 @@ html_template = f"""<!DOCTYPE html>
         document.addEventListener("DOMContentLoaded", function () {{
             if (sessionStorage.getItem("returningFromPost") === "true") {{
                 document.getElementById("search").value = sessionStorage.getItem("searchQuery") || "";
+                document.getElementById("postIdFilter").value = sessionStorage.getItem("postIdFilter") || "";
+                document.getElementById("authorFilter").value = sessionStorage.getItem("authorFilter") || "";
                 document.getElementById("startDate").value = sessionStorage.getItem("startDate") || "";
                 document.getElementById("endDate").value = sessionStorage.getItem("endDate") || "";
                 document.getElementById("sortOrder").value = sessionStorage.getItem("sortOrder") || "newest";
@@ -174,7 +176,7 @@ html_template = f"""<!DOCTYPE html>
                 postDiv.className = "post";
                 postDiv.innerHTML = `
                     <h3>
-                        <a href='${{post.post_url}}' target="_blank">${{post.post_id}}</a>
+                        <a href="posts/${{post.post_id}}.html">${{post.post_id}}</a>
                         ${{post.is_premium ? " 🔒" : ""}}
                     </h3>
                     <p><strong>Author:</strong> ${{post.author}}</p>
