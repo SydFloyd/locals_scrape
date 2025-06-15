@@ -222,12 +222,45 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         function updatePaginationControls(totalPosts) {{
-            let paginationContainer = document.getElementById("pagination");
-            paginationContainer.innerHTML = `
-                <button onclick="prevPage()" ${{currentPage === 1 ? "disabled" : ""}}>Previous</button>
-                <span> Page ${{currentPage}} of ${{Math.ceil(totalPosts / postsPerPage)}} </span>
-                <button onclick="nextPage()" ${{currentPage * postsPerPage >= totalPosts ? "disabled" : ""}}>Next</button>
-            `;
+            const totalPages = Math.ceil(totalPosts / postsPerPage);
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            const nav = document.createElement("div");
+            nav.style.display = "inline-block";
+
+            function createButton(label, page, disabled = false, bold = false) {{
+                const btn = document.createElement("button");
+                btn.textContent = label;
+                btn.disabled = disabled;
+                btn.style.margin = "2px";
+                if (bold) {{
+                    btn.style.fontWeight = "bold";
+                    btn.style.textDecoration = "underline";
+                }}
+                btn.onclick = () => {{
+                    currentPage = page;
+                    displayPosts();
+                    window.scrollTo({{ top: 0, behavior: "smooth" }});
+                }};
+                return btn;
+            }}
+
+            nav.appendChild(createButton("Start", 1, currentPage === 1));
+            nav.appendChild(createButton("Prev", currentPage - 1, currentPage === 1));
+
+            const pageWindow = 3;
+            const startPage = Math.max(1, currentPage - pageWindow);
+            const endPage = Math.min(totalPages, currentPage + pageWindow);
+
+            for (let i = startPage; i <= endPage; i++) {{
+                nav.appendChild(createButton(i, i, false, i === currentPage));
+            }}
+
+            nav.appendChild(createButton("Next", currentPage + 1, currentPage === totalPages));
+            nav.appendChild(createButton("End", totalPages, currentPage === totalPages));
+
+            paginationContainer.appendChild(nav);
         }}
 
         function nextPage() {{
