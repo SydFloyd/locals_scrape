@@ -41,6 +41,8 @@ html_template = f"""<!DOCTYPE html>
 <body>
     <h1>Phetasy</h1>
     <input type="text" id="search" placeholder="Search posts...">
+    <input type="text" id="postIdFilter" placeholder="Filter by Post ID">
+    <input type="text" id="authorFilter" placeholder="Filter by Author">
     <input type="date" id="startDate">
     <input type="date" id="endDate">
     <button onclick="filterPosts()">Filter</button>
@@ -87,6 +89,20 @@ html_template = f"""<!DOCTYPE html>
             }}
         }});
 
+        document.getElementById("postIdFilter").addEventListener("keydown", function (event) {{
+            if (event.key === "Enter") {{
+                event.preventDefault();  // Prevent form submission or accidental behavior
+                filterPosts();
+            }}
+        }});
+
+        document.getElementById("authorFilter").addEventListener("keydown", function (event) {{
+            if (event.key === "Enter") {{
+                event.preventDefault();  // Prevent form submission or accidental behavior
+                filterPosts();
+            }}
+        }});
+
 
         // Store scroll position and page when navigating to a post
         document.addEventListener("click", function (e) {{
@@ -94,6 +110,8 @@ html_template = f"""<!DOCTYPE html>
                 sessionStorage.setItem("scrollPosition", window.scrollY);
                 sessionStorage.setItem("currentPage", currentPage);
                 sessionStorage.setItem("searchQuery", document.getElementById("search").value);
+                sessionStorage.setItem("postIdFilter", document.getElementById("postIdFilter").value);
+                sessionStorage.setItem("authorFilter", document.getElementById("authorFilter").value);
                 sessionStorage.setItem("startDate", document.getElementById("startDate").value);
                 sessionStorage.setItem("endDate", document.getElementById("endDate").value);
                 sessionStorage.setItem("sortOrder", document.getElementById("sortOrder").value);
@@ -113,6 +131,8 @@ html_template = f"""<!DOCTYPE html>
             }}
 
             let searchQuery = document.getElementById("search").value.toLowerCase();
+            let postIdFilter = document.getElementById("postIdFilter").value.toLowerCase();
+            let authorFilter = document.getElementById("authorFilter").value.toLowerCase();
             let startDate = document.getElementById("startDate").value;
             let endDate = document.getElementById("endDate").value;
             let sortOrder = document.getElementById("sortOrder").value;
@@ -120,10 +140,14 @@ html_template = f"""<!DOCTYPE html>
             filteredPosts = posts.filter(post => {{
                 let matchesSearch = post.content.toLowerCase().includes(searchQuery) ||
                                     post.author.toLowerCase().includes(searchQuery);
+
+                let matchesPostId = !postIdFilter || post.post_id.toString().toLowerCase().includes(postIdFilter);
+                let matchesAuthor = !authorFilter || post.author.toLowerCase().includes(authorFilter);
+
                 let postDate = new Date(post.date);
                 let withinDateRange = (!startDate || postDate >= new Date(startDate)) && 
                                     (!endDate || postDate <= new Date(endDate));
-                return matchesSearch && withinDateRange;
+                return matchesSearch && matchesPostId && matchesAuthor && withinDateRange;
             }});
 
             if (sortOrder === "newest") {{
